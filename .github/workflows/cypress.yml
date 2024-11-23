@@ -1,4 +1,4 @@
-name: unit-lint-typecheck-e2e-ct
+name: Cypress Tests
 on:
   push:
   workflow_dispatch:
@@ -9,7 +9,7 @@ env:
   # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
 concurrency:
-  group: ${{ github.head_ref || github.ref }}
+  group: cypress-${{ github.head_ref || github.ref }}
   cancel-in-progress: true
 
 jobs:
