@@ -21,7 +21,7 @@
   "license": "MIT",
   "dependencies": {
     "json-server": "0.17.4",
-    "json-server-reset": "1.6.0"
+    "json-server-reset": "1.6.3"
   },
   "devDependencies": {
     "@playwright/test": "^1.49.0",
