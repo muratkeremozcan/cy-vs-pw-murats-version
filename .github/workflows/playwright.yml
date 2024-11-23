@@ -5,8 +5,6 @@ on:
 
 env:
   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-  # if you want to enable parallelization
-  # CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
 
 concurrency:
   group: playwright-${{ github.head_ref || github.ref }}
@@ -29,11 +27,19 @@ jobs:
         with:
           node-version: ${{ env.NODE_VERSION }}
 
+      - name: Cache Playwright Browsers
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ms-playwright
+          key: playwright-${{ runner.os }}-${{ github.sha }}
+          restore-keys: |
+            playwright-${{ runner.os }}-
+
       - name: Install dependencies
         run: npm ci
 
-      - name: Install Playwright Browsers
-        run: npx playwright install --with-deps
+      - name: Install Playwright Chromium Only
+        run: npx playwright install chromium
 
       - name: Run Playwright tests
         run: npx playwright test
