@@ -1,10 +1,18 @@
 // @ts-check
 /// <reference types="cypress" />
 
-it('has title', () => {
+beforeEach(() => {
+  cy.request('POST', '/reset', { data: { todos: [] } })
   cy.visit('/')
+})
 
+it('has title', () => {
+  console.log('running test "%s"', Cypress.currentTest.titlePath.join('/'))
   cy.title().should('equal', 'cy-vs-pw-example-todomvc')
 
-  cy.get('.todo-list li').should('have.length', 3, { timeout: 5000 })
+  cy.get('body').should('have.class', 'loaded')
+  // same thing
+  cy.get('body.loaded')
+
+  cy.get('.todo-list li').should('have.length', 0, { timeout: 1000 })
 })
