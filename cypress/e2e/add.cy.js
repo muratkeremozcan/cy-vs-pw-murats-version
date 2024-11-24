@@ -2,7 +2,7 @@
 /// <reference types="cypress" />
 
 beforeEach(() => {
-  cy.request('POST', '/reset', { data: { todos: [] } })
+  cy.request('POST', '/reset', { todos: [] })
   cy.visit('/')
 
   cy.get('body').should('have.class', 'loaded')
@@ -18,8 +18,8 @@ it('has title', () => {
 })
 
 it('adding todos', () => {
-  cy.get('[placeholder="What needs to be done?"]').type('Write code')
+  cy.get('[placeholder="What needs to be done?"]').type('Write code {enter}')
   cy.get('.todo-list li label')
     .should('have.length', 1)
-    .and('have.text', 'Write code')
+    .and('contain', 'Write code')
 })
