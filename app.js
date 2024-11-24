@@ -23,12 +23,12 @@ function appStart() {
       loading: false,
       todos: [],
       newTodo: '',
-      delay: 0
+      delay: 0,
     },
     getters: {
       newTodo: (state) => state.newTodo,
       todos: (state) => state.todos,
-      loading: (state) => state.loading
+      loading: (state) => state.loading,
     },
     mutations: {
       SET_DELAY(state, delay) {
@@ -39,6 +39,7 @@ function appStart() {
       },
       SET_LOADING(state, flag) {
         state.loading = flag
+
         if (flag === false) {
           // an easy way for the application to signal
           // that it is done loading
@@ -65,7 +66,7 @@ function appStart() {
       },
       CLEAR_NEW_TODO(state) {
         state.newTodo = ''
-      }
+      },
     },
     actions: {
       setDelay({ commit }, delay) {
@@ -118,7 +119,7 @@ function appStart() {
         const todo = {
           title: state.newTodo,
           completed: false,
-          id: randomId()
+          id: randomId(),
         }
         // artificial delay in the application
         // for test "flaky test - can pass or not depending on the app's speed"
@@ -135,7 +136,7 @@ function appStart() {
       addEntireTodo({ commit }, todoFields) {
         const todo = {
           ...todoFields,
-          id: randomId()
+          id: randomId(),
         }
         axios.post('/todos', todo).then(() => {
           commit('ADD_TODO', todo)
@@ -168,14 +169,14 @@ function appStart() {
             const todo = {
               title,
               completed: false,
-              id: randomId()
+              id: randomId(),
             }
             commit('ADD_TODO', todo)
             resolve()
           }, milliseconds)
         })
-      }
-    }
+      },
+    },
   })
 
   // a few helper utilities
@@ -192,7 +193,7 @@ function appStart() {
       return todos.filter(function (todo) {
         return todo.completed
       })
-    }
+    },
   }
 
   // app Vue instance
@@ -200,7 +201,7 @@ function appStart() {
     store,
     data: {
       file: null,
-      visibility: 'all'
+      visibility: 'all',
     },
     el: '.todoapp',
 
@@ -239,7 +240,7 @@ function appStart() {
       remaining() {
         return this.$store.getters.todos.filter((todo) => !todo.completed)
           .length
-      }
+      },
     },
 
     // methods that implement data logic.
@@ -274,8 +275,8 @@ function appStart() {
 
       removeCompleted() {
         this.$store.dispatch('removeCompleted')
-      }
-    }
+      },
+    },
   })
 
   // use the Router from the vendor/director.js library
@@ -294,7 +295,7 @@ function appStart() {
       notfound: function () {
         window.location.hash = ''
         app.visibility = 'all'
-      }
+      },
     })
 
     router.init()
