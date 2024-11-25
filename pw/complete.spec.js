@@ -20,22 +20,25 @@ test.describe('Complete todos', () => {
     await expect(todoLabels).toHaveText(labels)
 
     // confirm the "3" todos remaining is shown
-    await expect(count).toHaveText(String(items.length))
+    await expect(count).toHaveText(String(items.length - 1))
 
     // complete the first item by clicking its toggle element
     await todos.first().locator('.toggle').click()
-    // the first item should have class "completed"
-    await expect(todos.first()).toHaveClass(/completed/)
 
-    // confirm the 2nd and the 3rd items do not have class "completed"
-    await expect(todos.nth(1)).not.toHaveClass(/completed/)
+    // confirm completed vs not completed
+    await expect(todos.first()).toHaveClass(/completed/)
+    await expect(todos.nth(1)).toHaveClass(/completed/)
     await expect(todos.nth(2)).not.toHaveClass(/completed/)
 
     // confirm classes for all 3 elements at once
-    await expect(todos).toHaveClass(['todo completed', 'todo', 'todo'])
+    await expect(todos).toHaveClass([
+      'todo completed',
+      'todo completed',
+      'todo',
+    ])
 
-    // confirm there are 2 remaining items
-    await expect(count).toHaveText(String(items.length - 1))
+    // confirm there is 1 remaining items
+    await expect(count).toHaveText(String(items.length - 2))
     // and that we can clear the completed items button appears
     await expect(
       page.getByRole('button', { name: 'Clear completed' }),
