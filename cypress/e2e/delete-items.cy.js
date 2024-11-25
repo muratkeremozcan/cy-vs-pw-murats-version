@@ -1,6 +1,6 @@
 // @ts-check
 /// <reference types="cypress" />
-
+import 'cypress-real-events'
 import items from '../../fixtures/three.json'
 
 describe('App', () => {
@@ -16,11 +16,7 @@ describe('App', () => {
     cy.get(todos).should('have.length', items.length)
 
     // delete one completed item (the middle one)
-    cy.get(todos)
-      .eq(1)
-      .find('.destroy')
-      // skip visibility check
-      .click({ force: true })
+    cy.get(todos).eq(1).realHover().find('.destroy').click()
 
     // confirm the remaining two items are still there
     cy.get(todos)
@@ -29,11 +25,7 @@ describe('App', () => {
       .should('deep.equal', ['Write code', 'Make tests pass'])
 
     // delete one incomplete item (the first one)
-    cy.get(todos)
-      .first()
-      .find('.destroy')
-      // skip visibility check
-      .click({ force: true })
+    cy.get(todos).first().realHover().find('.destroy').click()
 
     // confirm the one remaining item
     cy.get(todos)
