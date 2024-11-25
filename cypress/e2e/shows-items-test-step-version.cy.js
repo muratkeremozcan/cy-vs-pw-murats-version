@@ -1,7 +1,7 @@
 // @ts-check
 /// <reference types="cypress" />
 
-import items from '../../fixtures/b5.json'
+import items from '../../fixtures/three.json'
 
 describe('Complete todos', () => {
   beforeEach(() => {

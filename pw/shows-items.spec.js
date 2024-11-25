@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
-const items = require('../fixtures/b5.json')
+const items = require('../fixtures/three.json')
 
 test.describe('App', () => {
   test.beforeEach(async ({ request }) => {

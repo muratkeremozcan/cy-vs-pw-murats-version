@@ -23,24 +23,23 @@ describe('Complete todos', () => {
       .should('deep.equal', labels)
 
     // confirm the "3" todos remaining is shown
-    cy.contains(count, items.length)
+    cy.contains(count, items.length - 1)
 
     // complete the first item by clicking its toggle element
     cy.get(todos).first().find('.toggle').click()
-    // the first item should have class "completed"
-    cy.get(todos).first().should('have.class', 'completed')
 
-    // confirm the 2nd and the 3rd items do not have class "completed"
-    cy.get(todos).eq(1).should('not.have.class', 'completed')
+    // confirm completed vs not completed
+    cy.get(todos).first().should('have.class', 'completed')
+    cy.get(todos).eq(1).should('have.class', 'completed')
     cy.get(todos).eq(2).should('not.have.class', 'completed')
 
     // confirm classes for all 3 elements at once
     cy.get(todos)
       .map('classList.value')
-      .should('deep.equal', ['todo completed', 'todo', 'todo'])
+      .should('deep.equal', ['todo completed', 'todo completed', 'todo'])
 
-    // confirm there are 2 remaining items
-    cy.contains(count, items.length - 1)
+    // confirm there is 1 remaining items
+    cy.contains(count, items.length - 2)
     // and that we can clear the completed items button appears
     cy.contains('button', 'Clear completed').should('be.visible')
   })
