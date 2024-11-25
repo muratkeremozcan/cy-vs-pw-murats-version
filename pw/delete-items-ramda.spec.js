@@ -40,7 +40,6 @@ test.describe('App', () => {
     const todos = page.locator('.todo-list li')
     await expect(todos).toHaveCount(items.length)
 
-    // Pass page to asyncPipe
     await asyncPipe(
       deleteTodoAtIndex(1),
       verifyTodosCount(items.length - 1),
