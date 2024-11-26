@@ -26,6 +26,7 @@ describe('App', () => {
       ($el) => $el.length > 2,
       'more than 2 elements',
     )
+    // solution 3
     cy.get(todos).should(($el) => {
       expect($el.length, 'more than 2 elements').to.be.greaterThan(2)
     })
