@@ -24,7 +24,7 @@ describe('App', () => {
     cy.get(todos)
       .should('have.length', 2)
       .map('innerText')
-      .should('deep.equal', ['Write code', 'Make tests pass'])
+      .should('deep.equal', ['Write code $1', 'Make tests pass $59'])
 
     // delete one incomplete item (the first one)
     cy.get(todos).first().realHover().find('.destroy').click()
@@ -32,6 +32,6 @@ describe('App', () => {
     // confirm the one remaining item
     cy.get(todos)
       .should('have.length', items.length - 2)
-      .contains('Make tests pass')
+      .contains('Make tests pass $59')
   })
 })
