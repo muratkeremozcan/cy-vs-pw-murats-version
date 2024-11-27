@@ -43,13 +43,13 @@ test.describe('App', () => {
     await asyncPipe(
       deleteTodoAtIndex(1),
       verifyTodosCount(items.length - 1),
-      verifyTodosText(['Write code', 'Make tests pass']),
+      verifyTodosText(['Write code $1', 'Make tests pass $59']),
     )(page)
 
     await asyncPipe(
       deleteTodoAtIndex(0),
       verifyTodosCount(items.length - 2),
-      verifyTodosText(['Make tests pass']),
+      verifyTodosText(['Make tests pass $59']),
     )(page)
   })
 })

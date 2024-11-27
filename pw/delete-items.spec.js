@@ -21,7 +21,7 @@ test.describe('App', () => {
 
     // confirm the remaining two items are still there
     await expect(todos).toHaveCount(items.length - 1)
-    await expect(todos).toHaveText(['Write code', 'Make tests pass'])
+    await expect(todos).toHaveText(['Write code $1', 'Make tests pass $59'])
 
     // delete one incomplete item (the first one)
     await todos.first().hover()
@@ -29,6 +29,6 @@ test.describe('App', () => {
 
     // confirm the one remaining item
     await expect(todos).toHaveCount(items.length - 2)
-    await expect(todos).toHaveText('Make tests pass')
+    await expect(todos).toHaveText('Make tests pass $59')
   })
 })

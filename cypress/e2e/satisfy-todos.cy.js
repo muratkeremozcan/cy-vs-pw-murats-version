@@ -19,6 +19,7 @@ describe('App', () => {
     // solution 1
     cy.get(todos).should('have.length.above', 2)
     cy.get(todos).should('have.length.greaterThan', 2)
+    cy.get(todos).its('length').should('be.greaterThan', 2)
     cy.get(todos).should('have.length.gte', 3)
     // solution 2
     cy.get(todos).should(
