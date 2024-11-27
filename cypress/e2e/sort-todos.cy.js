@@ -7,9 +7,11 @@ describe('Prices', () => {
   beforeEach(() => {
     cy.request('POST', '/reset', { todos: items })
     cy.visit('/')
+    cy.get('.loaded')
   })
 
   const todos = '.todo-list li'
+
   it('shows items sorted by price', () => {
     // confirm there are several items
     // and parse each item's title to get the prices
@@ -21,20 +23,39 @@ describe('Prices', () => {
       // @ts-ignore
       const prices = strings.map(parseFloat)
       const sorted = Cypress._.sortBy(prices) // doesn't mutate the original prices
-      expect(sorted).to.not.be.empty
       expect(sorted, 'sorted from min to max').to.deep.equal(prices)
     })
   })
-  it('cypress-map version', () => {
+
+  it('cypress-map version - shows items sorted by price', () => {
     cy.get(todos)
       .map('innerText')
-      .map((s) => s.match(/\$(?<price>\d+)/))
-      .map((m) => m?.groups?.price)
+      // .map((s) => s.match(/\$(?<price>\d+)/))
+      .mapInvoke('match', /\$(?<price>\d+)/) // better
+      // .map((m) => m?.groups?.price)
+      .map('groups.price') // better
       .map(parseFloat)
       .should((prices) => {
         const sorted = Cypress._.sortBy(prices)
-        expect(sorted).to.not.be.empty
         expect(sorted, 'sorted from min to max').to.deep.equal(prices)
       })
+  })
+
+  it('c9 shows the items with css class', () => {
+    // from the list of items get the list of titles
+    // and the list of CSS classes each item element should have
+    // completed? "todo" + "completed"
+    // incomplete? just "todo"
+    const titles = Cypress._.map(items, 'title')
+    const cssClasses = items.map((item) =>
+      item.completed ? 'todo completed' : 'todo',
+    )
+    // confirm the todo items have the titles and the class names
+    cy.get(todos).map('innerText').should('deep.equal', titles)
+    // timeout last: when you have multiple chained queries,
+    // place the timeout parameter on the last query before the assertion.
+    cy.get(todos)
+      .map('className', { timeout: 7000 })
+      .should('deep.equal', cssClasses)
   })
 })
