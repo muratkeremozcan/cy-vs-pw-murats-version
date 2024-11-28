@@ -7,7 +7,7 @@ test.describe('App', () => {
     // intercept the route "/todos"
     // - "GET /todos" respond with an empty list
     // - otherwise let the request continue
-    await page.route('/todos', (route) => {
+    page.route('/todos', (route) => {
       if (route.request().method() === 'GET') {
         return route.fulfill({
           headers: { 'Content-Type': 'application/json' },
