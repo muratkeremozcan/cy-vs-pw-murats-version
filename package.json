@@ -27,6 +27,7 @@
   "devDependencies": {
     "@playwright/test": "^1.49.0",
     "@types/node": "^22.9.3",
+    "cy-spok": "^1.6.2",
     "cypress": "^13.16.0",
     "cypress-map": "^1.41.0",
     "cypress-real-events": "^1.13.0",

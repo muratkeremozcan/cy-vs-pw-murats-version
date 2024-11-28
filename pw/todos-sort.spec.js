@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const items = require('../fixtures/three.json')
-const { tap, map, path, pipe } = require('ramda')
+const { tap, map, path, pipe, invoker } = require('ramda')
 
 test.describe('App', () => {
   let todos
@@ -28,20 +28,16 @@ test.describe('App', () => {
     }).toPass()
   })
 
-  test('ramda version - shows items sorted by price', async () => {
+  test('ramda version - shows items sorted by price', async ({ page }) => {
     await expect(async () => {
-      const titles = await todos.allInnerTexts() // text content without white space
-
-      // Functional pipeline to extract and parse prices
-      const extractPrices = pipe(
-        map((s) => s.match(/\$(\d+(\.\d+)?)/)), // Match prices like $59 or $59.99
-        tap(console.log),
-        map(path([1])), // get index 1s in array of arrays
-        map(parseFloat), // Convert price strings to numbers
-      )
-      const prices = extractPrices(titles)
+      const todos = page.locator('.todo-list li')
+      const titles = await todos.allInnerTexts()
+      const prices = pipe(
+        map(invoker(1, 'match')(/\$(\d+(\.\d+)?)/)),
+        map(path([1])),
+        map(parseFloat),
+      )(titles)
       const sorted = structuredClone(prices).sort()
-
       expect(sorted, 'sorted from min to max').toEqual(prices)
     }).toPass()
   })
@@ -58,6 +54,7 @@ test.describe('App', () => {
 
     // confirm the todo items have the titles and the class names
     await expect(todos).toHaveText(titles)
+    // timeouts in PW: timeout is added directly to the assertion
     await expect(todos).toHaveClass(cssClasses, { timeout: 7000 })
   })
 })
