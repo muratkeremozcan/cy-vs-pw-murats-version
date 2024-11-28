@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "Cypress vs Playwright TodoMVC example app",
   "main": "index.js",
+  "author": "Murat Ozcan <muratkerem@gmail.com>",
   "scripts": {
     "start": "json-server --static . --watch data.json --middlewares ./node_modules/json-server-reset",
     "reset": "node reset-db.js",
@@ -17,20 +18,19 @@
     "pw:run-trace": "npx playwright test --trace on && npx playwright show-report"
   },
   "keywords": [],
-  "author": "Gleb Bahmutov <gleb.bahmutov@gmail.com>",
   "license": "MIT",
   "dependencies": {
     "json-server": "0.17.4",
     "json-server-reset": "1.6.3",
-    "ramda": "^0.30.1"
+    "ramda": "0.30.1"
   },
   "devDependencies": {
-    "@playwright/test": "^1.49.0",
-    "@types/node": "^22.9.3",
-    "cy-spok": "^1.6.2",
-    "cypress": "^13.16.0",
-    "cypress-map": "^1.41.0",
-    "cypress-real-events": "^1.13.0",
-    "prettier": "^3.0.3"
+    "@playwright/test": "1.49.0",
+    "@types/node": "22.9.3",
+    "cy-spok": "1.6.2",
+    "cypress": "13.16.0",
+    "cypress-map": "1.41.0",
+    "cypress-real-events": "1.13.0",
+    "prettier": "3.0.3"
   }
 }
