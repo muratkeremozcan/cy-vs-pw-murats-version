@@ -28,12 +28,10 @@ describe('Prices', () => {
   })
 
   it('cypress-map version - shows items sorted by price', () => {
-    cy.get(todos)
+    cy.get('.todo-list li')
       .map('innerText')
-      // .map((s) => s.match(/\$(?<price>\d+)/))
-      .mapInvoke('match', /\$(?<price>\d+)/) // better
-      // .map((m) => m?.groups?.price)
-      .map('groups.price') // better
+      .mapInvoke('match', /\$(?<price>\d+)/)
+      .map('groups.price')
       .map(parseFloat)
       .should((prices) => {
         const sorted = Cypress._.sortBy(prices)
