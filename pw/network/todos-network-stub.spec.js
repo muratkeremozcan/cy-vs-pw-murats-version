@@ -1,12 +1,12 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
-const items = require('../fixtures/three.json')
+const items = require('../../fixtures/three.json')
 
 test.describe('App', () => {
   test.beforeEach(async ({ page }) => {
     // set up a route handler for "/todos" endpoint
     // when the route matches, fulfill it using the loaded items array
-    await page.route('/todos', (route) => {
+    page.route('/todos', (route) => {
       route.fulfill({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(items),
