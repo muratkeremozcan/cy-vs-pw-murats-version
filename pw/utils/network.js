@@ -17,14 +17,14 @@ const matchUrl = (url, pattern) => {
 }
 
 /**
- * Waits for a network request matching the given criteria and returns relevant data.
+ * Intercepts a network request matching the given criteria and returns relevant data.
  * @param {Object} options - The options for matching the request.
  * @param {string} options.method - The HTTP method to match.
  * @param {string} options.url - The URL pattern to match, e.g., '/todos/:id'.
  * @param {import('@playwright/test').Page} options.page - The Playwright page object.
  * @returns {Promise<{ request: import('playwright').Request, response: import('playwright').Response, data: any, status: number }>}
  */
-export async function waitForNetworkCall({ method, url, page }) {
+export async function interceptNetworkCall({ method, url, page }) {
   const request = await page.waitForRequest((request) => {
     const methodMatches = method ? request.method() === method : true
     const requestUrl = new URL(request.url()).pathname

@@ -1,6 +1,6 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
-const { waitForNetworkCall } = require('../utils/network')
+const { interceptNetworkCall } = require('../utils/network')
 
 test.describe('App', () => {
   test.beforeEach(async ({ page }) => {
@@ -13,7 +13,7 @@ test.describe('App', () => {
     const title = 'Advance ' + Math.round(Math.random() * 1e6)
 
     // spy on the "POST /todos" network call
-    const postTodo = waitForNetworkCall({
+    const postTodo = interceptNetworkCall({
       method: 'POST',
       url: '/todos',
       page,
@@ -29,7 +29,7 @@ test.describe('App', () => {
     } = await postTodo
 
     // spy on the "DELETE /todos/:id" network call
-    const deleteTodo = waitForNetworkCall({
+    const deleteTodo = interceptNetworkCall({
       method: 'DELETE',
       url: `/todos/${id}`,
       page,
