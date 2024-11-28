@@ -19,8 +19,9 @@ describe('Complete todos', () => {
     const labels = items.map((item) => item.title)
     cy.get(todoLabels)
       .should('have.length', items.length)
-      .map('innerText')
-      .should('deep.equal', labels)
+      .should('read', labels)
+    // .map('innerText') // old way
+    // .should('deep.equal', labels)
 
     // confirm the "3" todos remaining is shown
     cy.contains(count, items.length - 1)
