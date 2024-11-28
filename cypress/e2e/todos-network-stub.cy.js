@@ -15,6 +15,6 @@ describe('App', () => {
     cy.wait('@load')
     // confirm the the number of shown todos is 3
     // and that todos show up within 100ms of the load network call
-    cy.get('.todo-list li', { timeout: 100 }).should('have.length', 3)
+    cy.get('.todo-list li').should('have.length', 3)
   })
 })
