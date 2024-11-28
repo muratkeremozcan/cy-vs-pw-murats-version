@@ -4,7 +4,6 @@
 npm i
 npm start
 
-#
 npm run cy:open
 npm run cy:run
 
