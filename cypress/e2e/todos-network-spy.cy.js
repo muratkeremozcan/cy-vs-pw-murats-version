@@ -32,9 +32,7 @@ describe('App', () => {
           id: spok.string,
         }),
       )
-
-    // get the network intercept with the new todo again
-    // and confirm the server responds with status code 201
+    // confirm the server responds with status code 201
     cy.get('@post-todo').its('response.statusCode').should('equal', 201)
   })
 })

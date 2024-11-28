@@ -35,6 +35,7 @@ test.describe('App', () => {
 
     // confirm the new todo was sent over the network
     const request = await postTodo
+    const response = await request.response()
     // get the request data and confirm the known properties "title" and "completed"
     // confirm the request body includes the property "id", as string
     expect(request.postDataJSON()).toEqual({
@@ -42,8 +43,7 @@ test.describe('App', () => {
       completed: false,
       id: expect.any(String),
     })
-
-    const response = await request.response()
+    // confirm the server responds with status code 201
     expect(response?.status()).toBe(201)
   })
 })
