@@ -1,38 +1,43 @@
 // @ts-check
 /// <reference types="cypress" />
-import spok from 'cy-spok'
+
 describe('App', () => {
   beforeEach(() => {
-    // stub the "GET /todos" network calls
-    // and return an empty array
-    cy.intercept('GET', '/todos', { body: [] })
+    // Disable cache problem: 304
+    // Every time the application receives the data, it saves the ETag header value.
+    // Next time the app asks for the data, it sends this value with the header If-None-Match.
+    // If the server sees the match in the request, it simply responds with Status: 304 Not Modified, Body: "".
 
+    // Why is this not a problem in Playwright?
+    // Because enabling routing and waiting for responses disable the cache there.
+    // But in Cypress, we can test the caching behavior, thus it is up to us to disable the built-in caching
+
+    // KEY: disable network caching using a Chrome Debugger Protocol command
+    // by using "cy.wrap" command we ensure that the promise returned
+    // by the Cypress.automation method resolves before proceeding
+    // to the next Cypress command
+    cy.wrap(
+      Cypress.automation('remote:debugger:protocol', {
+        command: 'Network.setCacheDisabled',
+        params: {
+          cacheDisabled: true,
+        },
+      }),
+    )
+
+    // spy on the network call "GET /todos"
+    // give the network intercept an alias
+    cy.intercept('GET', '/todos').as('load')
     cy.visit('/')
-    cy.get('.loaded')
-    cy.get('.todo-list li').should('have.length', 0)
   })
 
-  it('sends new todo object', () => {
-    // spy on the "POST /todos" call
-    cy.intercept('POST', '/todos').as('post-todo')
-
-    // add an item
-    cy.get('.new-todo').type('Learn testing{enter}')
-    cy.get('.todo-list li').should('have.length', 1)
-
-    // confirm the new todo was sent over the network
-    cy.wait('@post-todo')
-      // get the request body and confirm the known properties "title" and "completed"
-      // confirm the request body includes the property "id", as string
-      .its('request.body')
-      .should(
-        spok({
-          title: 'Learn testing',
-          completed: false,
-          id: spok.string,
-        }),
-      )
-    // confirm the server responds with status code 201
-    cy.get('@post-todo').its('response.statusCode').should('equal', 201)
+  it('shows the same number of items as sent by the server', () => {
+    // wait for the network alias
+    // grab its length and pass it to the cy.then callback
+    // inside the callback get the number of Todo items on the page,
+    // it should equal to the number of items returned by the server
+    cy.wait('@load')
+      .its('response.body.length')
+      .then((n) => cy.get('.todo-list li').should('have.length', n))
   })
 })

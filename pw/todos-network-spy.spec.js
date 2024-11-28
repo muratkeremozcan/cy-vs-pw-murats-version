@@ -2,48 +2,25 @@
 const { test, expect } = require('@playwright/test')
 
 test.describe('App', () => {
-  // let loadSpy // is it really needed?
-  test.beforeEach(async ({ page }) => {
-    // intercept the route "/todos"
-    // - "GET /todos" respond with an empty list
-    // - otherwise let the request continue
-    await page.route('/todos', (route) => {
-      if (route.request().method() === 'GET') {
-        return route.fulfill({
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify([]),
-        })
-      } else {
-        route.continue()
-      }
-    })
+  let load
 
+  test.beforeEach(async ({ page }) => {
+    // spy on the network calls to "/todos" endpoint
+    load = page.waitForRequest('/todos')
     await page.goto('/')
-    await page.locator('.loaded').waitFor()
-    await expect(page.locator('.todo-list li')).toHaveCount(0)
   })
 
-  test('shows the items with css class', async ({ page }) => {
-    // spy on the "POST /todos" call
-    const postTodo = page.waitForRequest(
-      (req) => req.method() === 'POST' && req.url().endsWith('/todos'),
-    )
-
-    // add an item
-    await page.locator('.new-todo').fill('Learn testing')
-    await page.locator('.new-todo').press('Enter')
-
-    // confirm the new todo was sent over the network
-    const request = await postTodo
+  test('shows the same number of items as sent by the server', async ({
+    page,
+  }) => {
+    // confirm the network call has happened
+    // and get the response as json
+    // confirm the page shows the same number of todo items
+    // as sent by the server
+    const request = await load
     const response = await request.response()
-    // get the request data and confirm the known properties "title" and "completed"
-    // confirm the request body includes the property "id", as string
-    expect(request.postDataJSON()).toEqual({
-      title: 'Learn testing',
-      completed: false,
-      id: expect.any(String),
-    })
-    // confirm the server responds with status code 201
-    expect(response?.status()).toBe(201)
+    const todos = await response.json()
+
+    await expect(page.locator('.todo-list li')).toHaveCount(todos.length)
   })
 })
