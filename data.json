@@ -6,8 +6,13 @@
       "id": "1"
     },
     {
+<<<<<<< Updated upstream
       "title": "Write tests $4",
       "completed": true,
+=======
+      "title": "Write tests",
+      "completed": false,
+>>>>>>> Stashed changes
       "id": "2"
     },
     {
