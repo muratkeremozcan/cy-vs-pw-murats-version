@@ -26,11 +26,11 @@
   },
   "devDependencies": {
     "@playwright/test": "1.49.0",
-    "@types/node": "22.9.3",
+    "@types/node": "22.10.1",
     "cy-spok": "1.6.2",
     "cypress": "13.16.0",
     "cypress-map": "1.43.0",
     "cypress-real-events": "1.13.0",
-    "prettier": "3.0.3"
+    "prettier": "3.4.1"
   }
 }
