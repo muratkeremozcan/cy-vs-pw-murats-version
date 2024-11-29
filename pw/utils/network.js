@@ -1,45 +1,52 @@
 /**
  * Intercepts a network request matching the given criteria.
  * - If `fulfillResponse` is provided, stubs the request and fulfills it with the given response.
+ * - If `handler` is provided, uses it to handle the route.
  * - Otherwise, observes the request and returns its data.
  * @param {Object} options - Options for matching and handling the request.
- * @param {string} [options.method] - The HTTP method to match (e.g., 'GET', 'POST').
- * @param {string} [options.url] - The URL pattern to match (e.g., '/todos/:id').
+ * @param {string} [options.method] - The HTTP method to match.
+ * @param {string} [options.url] - The URL pattern to match.
  * @param {import('@playwright/test').Page} options.page - The Playwright page object.
  * @param {Object} [options.fulfillResponse] - Optional response to fulfill the request with.
- * @returns {Promise<{ request: import('playwright').Request | null, response: import('playwright').Response | null, data: any, status: number, requestJson: any }>}
+ * @param {function} [options.handler] - Optional handler function for custom route handling.
+ * @returns {Promise<{ request: import('@playwright/test').Request | null, response: import('@playwright/test').Response | null, data: any, status: number, requestJson: any }>}
  */
 export async function interceptNetworkCall({
   method,
   url,
   page,
   fulfillResponse,
+  handler,
 }) {
-  if (fulfillResponse) {
-    return fulfillNetworkCall(page, method, url, fulfillResponse)
+  if (fulfillResponse || handler) {
+    return fulfillNetworkCall(page, method, url, fulfillResponse, handler)
   } else {
     return observeNetworkCall(page, method, url)
   }
 }
 
 /**
- * Stubs the network request matching the criteria and fulfills it with the specified response.
+ * Stubs the network request matching the criteria and fulfills it with the specified response or handler.
  * @param {import('@playwright/test').Page} page - The Playwright page object.
  * @param {string} [method] - The HTTP method to match.
  * @param {string} [url] - The URL pattern to match.
- * @param {Object} fulfillResponse - The response to fulfill the request with.
+ * @param {Object} [fulfillResponse] - The response to fulfill the request with.
+ * @param {function} [handler] - Optional handler function for custom route handling.
  * @returns {Promise<{ request: null, response: null, data: null, status: number, requestJson: null }>}
  */
-async function fulfillNetworkCall(page, method, url, fulfillResponse) {
+async function fulfillNetworkCall(page, method, url, fulfillResponse, handler) {
   await page.route('**/*', async (route, request) => {
     if (matchesRequest(request, method, url)) {
-      await route.fulfill(fulfillResponse)
+      if (handler) {
+        await handler(route, request)
+      } else {
+        await route.fulfill(fulfillResponse)
+      }
     } else {
       await route.continue()
     }
   })
-  // Set status to the status code provided in fulfillResponse, defaulting to 200
-  const status = fulfillResponse.status || 200
+  const status = fulfillResponse?.status || 200
   return {
     request: null,
     response: null,
