@@ -31,6 +31,7 @@
     "cypress": "13.16.0",
     "cypress-map": "1.43.0",
     "cypress-real-events": "1.13.0",
-    "prettier": "3.4.1"
+    "prettier": "3.4.1",
+    "sinon": "^19.0.2"
   }
 }
