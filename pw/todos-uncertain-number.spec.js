@@ -55,6 +55,7 @@ test.describe('App ', () => {
   test.beforeEach(async ({ page, request }) => {
     await request.post('/reset', { data: { todos: items } })
     await page.goto('/')
+    await page.locator('.loaded').waitFor()
   })
 
   test('shows more than 2 items at the start', async ({ page }) => {

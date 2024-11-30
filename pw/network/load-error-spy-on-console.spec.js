@@ -2,6 +2,7 @@
 
 const { test, expect } = require('@playwright/test')
 const { interceptNetworkCall } = require('../utils/network')
+const { spyOnConsole } = require('../utils/console-spy')
 
 test.describe('App', () => {
   test('logs a server error', async ({ page }) => {
@@ -41,9 +42,11 @@ test.describe('App', () => {
     ).toPass()
   })
 
-  test('network helpers version -logs a server error', async ({ page }) => {
+  test('network console-spy helpers version - logs a server error', async ({
+    page,
+  }) => {
     // Stub the "GET /todos" route and return an object with status code 500
-    await interceptNetworkCall({
+    const load = interceptNetworkCall({
       method: 'GET',
       url: '/todos',
       page,
@@ -56,19 +59,22 @@ test.describe('App', () => {
       },
     })
 
-    const errorMessages = []
-    page.on('console', (msg) => {
-      if (msg.type() === 'error') {
-        errorMessages.push(msg.text())
-      }
-    })
+    // Set up a spy on console.error using the helper
+    const errorMessages = await spyOnConsole(page, 'error')
 
     // Visit the page
     await page.goto('/')
+    await load
 
-    // Wait for the error message to be logged
-    await expect
-      .poll(() => errorMessages, { message: 'Waiting for error message' })
-      .toContain('server error')
+    // retry checking the error messages array
+    // to find the message "server error"
+    // that the application should print when it receives
+    // an error response from the backend
+    await expect(() =>
+      expect(
+        errorMessages.map((args) => args.join(' ')),
+        'error message',
+      ).toContain('server error'),
+    ).toPass()
   })
 })

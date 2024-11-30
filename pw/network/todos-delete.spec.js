@@ -7,6 +7,8 @@ test.describe('App', () => {
     await page.goto('/')
     // wait for the page to load the todos
     await page.locator('.loaded').waitFor()
+    // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
+    await new Promise((resolve) => setTimeout(resolve, 2000))
   })
 
   test('deletes a todo', async ({ page }) => {
