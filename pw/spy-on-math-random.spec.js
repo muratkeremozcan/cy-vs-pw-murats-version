@@ -2,7 +2,6 @@
 
 const { test, expect } = require('@playwright/test')
 const { interceptNetworkCall } = require('./utils/network')
-const { stubPageFunction } = require('./utils/function-stub')
 const items = require('../fixtures/three.json')
 
 test.describe('App', () => {
