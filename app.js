@@ -50,9 +50,8 @@ function appStart() {
         state.todos = todos
         // expose the todos via the global "window" object
         // but only if we are running Cypress tests
-        if (window.Cypress) {
-          window.todos = todos
-        }
+        window.todos = todos
+        localStorage.setItem('todos', JSON.stringify(todos))
       },
       SET_NEW_TODO(state, todo) {
         state.newTodo = todo
