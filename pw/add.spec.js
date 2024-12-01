@@ -30,7 +30,5 @@ test('adding todos', async ({ page }) => {
   const todos = page.locator('.todo-list li label')
   expect(await todos.count()).toBeGreaterThanOrEqual(1)
   // Check if at least one element contains the text
-  expect(await todos.filter({ hasText: 'Write code' }).count()).toBeGreaterThan(
-    0,
-  )
+  await page.locator('li.todo', { hasText: 'Write code' })
 })
