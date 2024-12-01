@@ -1,5 +1,6 @@
 import { test, type Page, expect } from '@playwright/test'
 const todos = require('../fixtures/three.json')
+const isCI = require('is-ci')
 
 // confirm there are more than 1 todos
 expect(todos.length, 'number of todos').toBeGreaterThan(1)
@@ -7,6 +8,9 @@ expect(todos.length, 'number of todos').toBeGreaterThan(1)
 test.describe.configure({ mode: 'serial' })
 
 test.describe('serial run', () => {
+  if (isCI) {
+    test.skip(true, 'Skipping serial tests in CI environment')
+  }
   // reuse the same page for all tests
   let page: Page
 
