@@ -4,10 +4,9 @@
 const { test, expect } = require('@playwright/test')
 
 test.describe('App', () => {
-  test('fetches todos every 60 seconds', async ({ page, context }) => {
+  test('fetches todos every 60 seconds', async ({ page }) => {
     // setup clock
-    const clock = context.clock
-    await clock.install()
+    await page.clock.install()
 
     // Spy on the "/todos" network requests
     const loadTodos1 = page.waitForRequest('/todos')
@@ -18,17 +17,17 @@ test.describe('App', () => {
     await page.goto('/')
 
     // Wait for the initial "/todos" request
-    await clock.fastForward(1000)
+    await page.clock.fastForward(1000)
     await loadTodos1
 
     // advance the fake timers by 61 seconds
     // and confirm the application fetches the "/todos" endpoint again
-    await clock.fastForward(61_000)
+    await page.clock.fastForward(61_000)
     await loadTodos2
 
     // advance the fake timers by 61 seconds
     // and confirm the application fetches the "/todos" endpoint again
-    await clock.fastForward(61_000)
+    await page.clock.fastForward(61_000)
     await loadTodos3
   })
 

@@ -49,8 +49,12 @@ function appStart() {
       SET_TODOS(state, todos) {
         state.todos = todos
         // expose the todos via the global "window" object
-        // but only if we are running Cypress tests
-        window.todos = todos
+        window.appTodos = structuredClone(todos)
+        window.appTodos.forEach((todo) => {
+          // each todo will have a reference to the parent list
+          todo.list = window.appTodos
+        })
+        // save the todos to the local storage
         localStorage.setItem('todos', JSON.stringify(todos))
       },
       SET_NEW_TODO(state, todo) {
@@ -110,13 +114,14 @@ function appStart() {
       setNewTodo({ commit }, todo) {
         commit('SET_NEW_TODO', todo)
       },
-      addTodo({ commit, state }) {
-        if (!state.newTodo) {
+      addTodo({ commit, state }, newTodo) {
+        const title = state.newTodo || newTodo
+        if (!title) {
           // do not add empty todos
           return
         }
         const todo = {
-          title: state.newTodo,
+          title,
           completed: false,
           id: randomId(),
         }
@@ -126,7 +131,7 @@ function appStart() {
         // increase the timeout delay to make the test fail
         // 50ms should be good
         setTimeout(() => {
-          track('todo.add', todo.title)
+          track('todo.add', title)
           axios.post('/todos', todo).then(() => {
             commit('ADD_TODO', todo)
           })
@@ -207,7 +212,7 @@ function appStart() {
     created() {
       const delay = parseFloat(params.get('delay') || '0')
       const renderDelay = parseFloat(params.get('renderDelay') || '0')
-      addTodoDelay = parseFloat(params.get('addTodoDelay') || '0')
+      addTodoDelay = parseFloat(params.get('addTodoDelay') || '1000')
 
       this.$store.dispatch('setRenderDelay', renderDelay).then(() => {
         this.$store.dispatch('setDelay', delay).then(() => {

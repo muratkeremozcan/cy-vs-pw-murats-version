@@ -6,6 +6,7 @@ describe('App', () => {
   beforeEach(() => {
     cy.request('POST', '/reset', { todos: items })
     cy.visit('/')
+    cy.get('.todo').should('have.length', 3)
   })
 
   it('shows more than 2 items at the start', () => {
