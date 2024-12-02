@@ -1,8 +1,7 @@
 // @ts-check
 
-const { test, expect } = require('@playwright/test')
-const { interceptNetworkCall } = require('./support/utils/network')
-const items = require('../fixtures/three.json')
+const { test, expect } = require('../support/fixtures')
+const items = require('../../fixtures/three.json')
 
 test.describe('App', () => {
   test.beforeEach(async ({ request, page }) => {
@@ -60,12 +59,12 @@ test.describe('App', () => {
 
   test('network helper version confirms the entire sent Todo object', async ({
     page,
+    interceptNetworkCall,
   }) => {
     // start spying on the network requests to "/todos"
     const post = interceptNetworkCall({
       method: 'POST',
       url: '/todos',
-      page,
     })
 
     page.evaluate(() => {

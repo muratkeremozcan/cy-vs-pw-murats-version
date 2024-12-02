@@ -1,6 +1,6 @@
 // @ts-check
 /// <reference types="cypress" />
-import items from '../../fixtures/three.json'
+import items from '../../../fixtures/three.json'
 
 chai.config.truncateThreshold = 400
 
