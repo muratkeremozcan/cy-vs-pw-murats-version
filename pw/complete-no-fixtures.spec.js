@@ -19,7 +19,7 @@ test.describe('Complete todos', () => {
     await expect(todoLabels).toHaveCount(items.length)
     await expect(todoLabels).toHaveText(labels)
 
-    // confirm the "3" todos remaining is shown
+    // confirm the "2" todos remaining is shown
     await expect(count).toHaveText(String(items.length - 1))
 
     // complete the first item by clicking its toggle element

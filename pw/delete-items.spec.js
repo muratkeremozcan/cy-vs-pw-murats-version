@@ -1,18 +1,17 @@
 // @ts-check
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('./support/fixtures')
 const items = require('../fixtures/three.json')
 
 test.describe('App', () => {
-  test.beforeEach(async ({ request }) => {
+  test.beforeEach(async ({ resetAndVisit }) => {
     // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
-    await new Promise((resolve) => setTimeout(resolve, 3000))
-    await request.post('/reset', { data: { todos: items } })
+    await new Promise((resolve) => setTimeout(resolve, 2000))
+    await resetAndVisit(items)
   })
 
   test('deletes items', async ({ page }) => {
     const todos = page.locator('.todo-list li')
 
-    await page.goto('/')
     await expect(todos).toHaveCount(items.length)
 
     // delete one completed item (the middle one)

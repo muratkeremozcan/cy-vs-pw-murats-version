@@ -1,8 +1,8 @@
 // @ts-check
 
 const { test, expect } = require('@playwright/test')
-const { interceptNetworkCall } = require('../utils/network')
-const { spyOnConsole } = require('../utils/console-spy')
+const { interceptNetworkCall } = require('../support/utils/network')
+const { spyOnConsole } = require('../support/utils/console-spy')
 
 test.describe('App', () => {
   test('logs a server error', async ({ page }) => {

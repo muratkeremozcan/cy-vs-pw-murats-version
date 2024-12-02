@@ -1,5 +1,5 @@
 const { test, expect } = require('@playwright/test')
-const { spyOnConsole } = require('./utils/console-spy')
+const { spyOnConsole } = require('./support/utils/console-spy')
 
 test.describe('App', () => {
   test('prints the load start message', async ({ page }) => {

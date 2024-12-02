@@ -1,6 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const items = require('../fixtures/three.json')
+const { resetAndVisit } = require('./support/helpers/plain-functions')
 
 /**
  * Composes asynchronous functions, passing the same 'page' argument to each function in sequence.
@@ -31,12 +32,14 @@ const verifyTodosText = (expectedTexts) => async (page) => {
 }
 
 test.describe('App', () => {
-  test.beforeEach(async ({ request }) => {
-    await request.post('/reset', { data: { todos: items } })
+  test.beforeEach(async ({ page, request }) => {
+    // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
+    await new Promise((resolve) => setTimeout(resolve, 3000))
+    // plain function version (not using fixture) needs to pass in page and request
+    await resetAndVisit({ page, request, data: items })
   })
 
   test('deletes items', async ({ page }) => {
-    await page.goto('/')
     const todos = page.locator('.todo-list li')
     await expect(todos).toHaveCount(items.length)
 

@@ -1,7 +1,7 @@
 // @ts-check
 
 const { test, expect } = require('@playwright/test')
-const { interceptNetworkCall } = require('./utils/network')
+const { interceptNetworkCall } = require('./support/utils/network')
 const items = require('../fixtures/three.json')
 
 test.describe('App', () => {
