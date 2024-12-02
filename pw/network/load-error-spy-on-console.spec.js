@@ -1,8 +1,7 @@
 // @ts-check
 
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('../support/fixtures')
 const { interceptNetworkCall } = require('../support/utils/network')
-const { spyOnConsole } = require('../support/utils/console-spy')
 
 test.describe('App', () => {
   test('logs a server error', async ({ page }) => {
@@ -44,6 +43,7 @@ test.describe('App', () => {
 
   test('network console-spy helpers version - logs a server error', async ({
     page,
+    spyOn,
   }) => {
     // Stub the "GET /todos" route and return an object with status code 500
     const load = interceptNetworkCall({
@@ -60,7 +60,7 @@ test.describe('App', () => {
     })
 
     // Set up a spy on console.error using the helper
-    const errorMessages = await spyOnConsole(page, 'error')
+    const errorMessages = await spyOn('console', 'error')
 
     // Visit the page
     await page.goto('/')

@@ -1,10 +1,10 @@
-const { test, expect } = require('@playwright/test')
-const { spyOnConsole } = require('./support/utils/console-spy')
+// @ts-check
+const { test, expect } = require('./support/fixtures')
 
 test.describe('App', () => {
   test('prints the load start message', async ({ page }) => {
     const log = []
-    // expose function in the application's "window" object
+    // create a function in the application's "window" object
     // called "logCall" which simply pushes its argument
     // into the "log" array
     // Read "Verifying API calls"
@@ -19,7 +19,7 @@ test.describe('App', () => {
     await page.addInitScript(() => {
       const realLog = console.log.bind(console)
       console.log = (...args) => {
-        realLog.apply(null, args)
+        realLog(...args)
         // @ts-ignore
         window.logCall(args)
       }
@@ -35,11 +35,12 @@ test.describe('App', () => {
     ).toPass()
   })
 
-  test('console-spy helper version -prints the load start message', async ({
+  test('spyOn helper version - prints the load start message', async ({
     page,
+    spyOn,
   }) => {
     // Initialize the console log spy
-    const log = await spyOnConsole(page)
+    const log = await spyOn('console', 'log')
 
     // Visit the application page
     await page.goto('/')

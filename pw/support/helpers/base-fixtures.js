@@ -1,6 +1,7 @@
 // @ts-check
 const { test: base } = require('@playwright/test')
 const { resetAndVisit: resetAndVisitFunction } = require('./plain-functions')
+const { spyOn: spyOnFunction } = require('../utils/spy-stub-helper')
 
 // Extend the base test with our custom fixture
 const test = base.extend({
@@ -9,9 +10,14 @@ const test = base.extend({
     // Define the function without needing to pass page and request
     const resetAndVisit = (data) =>
       resetAndVisitFunction({ page, request, data })
-
     // Make the function available in the test
     await use(resetAndVisit)
+  },
+
+  spyOn: async ({ page }, use) => {
+    const spyOn = (objectName, method) =>
+      spyOnFunction(page, objectName, method)
+    await use(spyOn)
   },
 })
 
