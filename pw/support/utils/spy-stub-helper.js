@@ -1,0 +1,131 @@
+// @ts-check
+
+/**
+ * Sets up a spy on a specified method within the page context.
+ * Captures all calls to the method into an array for later assertions.
+ *
+ * @param {import('@playwright/test').Page} page - The Playwright page object.
+ * @param {string} objectName - The name of the object to spy on (e.g., 'console').
+ * @param {string} method - The method to spy on (e.g., 'log').
+ * @returns {Promise<Array<any>>} - A promise that resolves to an array containing the captured calls and their arguments.
+ *
+ * @example
+ * // To spy on console.log:
+ * const logMessages = await spyOn(page, 'console', 'log');
+ *
+ * // Perform actions that trigger console.log in the page context
+ * await page.goto('/');
+ *
+ * // Now, logMessages contains all the arguments passed to console.log
+ * console.log(logMessages);
+ *
+ * @remarks
+ * This function works by:
+ * 1. Exposing a function (`exposedFunctionName`) to the page context.
+ * 2. Injecting a script into the page that overrides the specified method (`objectName[method]`).
+ *    - The overridden method calls the original method to maintain normal functionality.
+ *    - It then calls the exposed function to pass the arguments back to the Node.js context.
+ *
+ * The second argument in `page.addInitScript` is an object that contains the values you want to pass
+ * into the injected function.
+ * When the function runs in the page context, it receives this object as its argument.
+ * This allows the injected script to access the `objectName`, `method`, and `exposedFunctionName` variables.
+ */
+export async function spyOn(page, objectName, method) {
+  const messages = []
+
+  // create a function in the application's "window" object which pushes its arguments
+  const exposedFunctionName = `${objectName}_${method}_spy`
+  await page.exposeFunction(exposedFunctionName, (...args) =>
+    messages.push(args),
+  )
+
+  // inject the initial script into the application, which overwrites the specified method
+  await page.addInitScript(
+    ({ objectName, method, exposedFunctionName }) => {
+      const object = window[objectName]
+
+      if (!object || typeof object[method] !== 'function') {
+        throw new Error(`Method ${method} not found on object ${objectName}`)
+      }
+
+      const originalMethod = object[method].bind(object)
+
+      object[method] = (...args) => {
+        // call the original method
+        originalMethod(...args)
+        // pass the arguments to the exposed function
+        window[exposedFunctionName](...args)
+      }
+    },
+    // The second argument is an object that contains the values you want to pass
+    // into the injected function.
+    // When the function runs in the page context, it receives this object as its argument.
+    { objectName, method, exposedFunctionName },
+  )
+
+  return messages
+}
+
+/**
+ * Stubs a specified method within the page context.
+ * Replaces the method with a stub that can have custom behavior.
+ * Captures all calls to the method into an array for later assertions.
+ *
+ * @param {import('@playwright/test').Page} page - The Playwright page object.
+ * @param {string} objectName - The name of the object to stub (e.g., 'console').
+ * @param {string} method - The method to stub (e.g., 'log').
+ * @param {Function} [implementation] - Optional custom implementation for the stubbed method.
+ * @returns {Promise<Array<any>>} - A promise that resolves to an array containing the captured calls and their arguments.
+ */
+export async function stubMethod(page, objectName, method, implementation) {
+  const calls = []
+
+  // Create a function in the Node.js context that will receive the method arguments from the page context
+  const exposedFunctionName = `${objectName}_${method}_stub`
+  await page.exposeFunction(exposedFunctionName, (...args) => {
+    calls.push(args)
+  })
+
+  // Inject a script into the page that replaces the specified method with a stub
+  await page.addInitScript(
+    /**
+     * @param {{ objectName: string; method: string; exposedFunctionName: string; hasCustomImpl: boolean }} params
+     */
+    ({ objectName, method, exposedFunctionName, hasCustomImpl }) => {
+      // Access the global object in the page context
+      const object = window[objectName]
+
+      if (!object) {
+        throw new Error(`Object ${objectName} not found in window`)
+      }
+
+      // Replace the method with a stub
+      object[method] = (...args) => {
+        // Call the exposed function in the Node.js context to capture the arguments
+        window[exposedFunctionName](...args)
+
+        if (hasCustomImpl) {
+          // If a custom implementation is provided, call it
+          return window[`customImpl_${exposedFunctionName}`](...args)
+        }
+        // Default behavior: Do nothing or return undefined
+      }
+    },
+    // Pass parameters to the injected script
+    {
+      objectName,
+      method,
+      exposedFunctionName,
+      hasCustomImpl: !!implementation,
+    },
+  )
+
+  // If a custom implementation is provided, expose it to the page context
+  if (implementation) {
+    const customImplName = `customImpl_${exposedFunctionName}`
+    await page.exposeFunction(customImplName, implementation)
+  }
+
+  return calls
+}

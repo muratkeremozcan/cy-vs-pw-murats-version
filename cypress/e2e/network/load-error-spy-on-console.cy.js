@@ -17,7 +17,7 @@ describe('App', () => {
     // https://on.cypress.io/stub
     cy.visit('/', {
       onBeforeLoad(win) {
-        cy.stub(win.console, 'error').as('console-error')
+        cy.spy(win.console, 'error').as('console-error')
       },
     })
     // wait for the network call
