@@ -1,7 +1,10 @@
 // @ts-check
 const { test: base } = require('@playwright/test')
 const { resetAndVisit: resetAndVisitFunction } = require('./plain-functions')
-const { spyOn: spyOnFunction } = require('../utils/spy-stub-helper')
+const {
+  spyOn: spyOnFunction,
+  stubMethod: stubMethodFunction,
+} = require('../utils/spy-stub-helper')
 
 // Extend the base test with our custom fixture
 const test = base.extend({
@@ -18,6 +21,12 @@ const test = base.extend({
     const spyOn = (objectName, method) =>
       spyOnFunction(page, objectName, method)
     await use(spyOn)
+  },
+
+  stubMethod: async ({ page }, use) => {
+    const stubMethod = (objectName, method, implementation) =>
+      stubMethodFunction(page, objectName, method, implementation)
+    await use(stubMethod)
   },
 })
 
