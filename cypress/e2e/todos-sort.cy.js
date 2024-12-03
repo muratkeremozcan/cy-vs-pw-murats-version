@@ -39,7 +39,7 @@ describe('Prices', () => {
       })
   })
 
-  it('c9 shows the items with css class', () => {
+  it('shows the items with css class', () => {
     // from the list of items get the list of titles
     // and the list of CSS classes each item element should have
     // completed? "todo" + "completed"
