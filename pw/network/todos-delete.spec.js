@@ -85,7 +85,6 @@ test.describe('App', () => {
 
     // confirm the delete network call happens
     // and the server responded with the status code 200
-    /** @type {{ status: number }} */
     const { status } = await deleteTodo
     expect(status).toBe(200)
 

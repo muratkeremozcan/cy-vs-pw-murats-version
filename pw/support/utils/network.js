@@ -18,6 +18,10 @@ export async function interceptNetworkCall({
   fulfillResponse,
   handler,
 }) {
+  if (!page) {
+    throw new Error('The `page` argument is required for network interception')
+  }
+
   if (fulfillResponse || handler) {
     return fulfillNetworkCall(page, method, url, fulfillResponse, handler)
   } else {
