@@ -1,5 +1,5 @@
 // @ts-check
-const { test, expect } = require('@playwright/test')
+const { test, expect } = require('../support/fixtures')
 const { interceptNetworkCall } = require('../support/utils/network')
 
 test.describe('App', () => {
@@ -24,7 +24,7 @@ test.describe('App', () => {
     await expect(page.locator('.todo-list li')).toHaveCount(0)
   })
 
-  test('shows the items with css class', async ({ page }) => {
+  test('shows the items with css class', async ({ page, apiRequest }) => {
     // spy on the "POST /todos" call
     const postTodo = page.waitForRequest(
       (req) => req.method() === 'POST' && req.url().endsWith('/todos'),
@@ -46,10 +46,18 @@ test.describe('App', () => {
     })
     // confirm the server responds with status code 201
     expect(response?.status()).toBe(201)
+
+    // clean up
+    const id = request.postDataJSON().id
+    await apiRequest({
+      method: 'DELETE',
+      url: `/todos/${id}`,
+    })
   })
 
   test('network helpers version -shows the items with css class', async ({
     page,
+    apiRequest,
   }) => {
     const postTodo = interceptNetworkCall({
       method: 'POST',
@@ -73,5 +81,12 @@ test.describe('App', () => {
 
     // confirm the server responds with status code 201
     expect(response?.status()).toBe(201)
+
+    // clean up
+    const id = request?.postDataJSON().id
+    await apiRequest({
+      method: 'DELETE',
+      url: `/todos/${id}`,
+    })
   })
 })
