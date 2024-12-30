@@ -1,6 +1,8 @@
 // @ts-check
 const { test: base } = require('@playwright/test')
-const { resetAndVisit: resetAndVisitFunction } = require('./plain-functions')
+const {
+  resetAndVisit: resetAndVisitFunction,
+} = require('../fixture-helpers/plain-functions')
 const {
   spyOn: spyOnFunction,
   stubMethod: stubMethodFunction,
