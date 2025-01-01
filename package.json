@@ -30,6 +30,7 @@
     "@bahmutov/cy-api": "^2.2.6",
     "@playwright/test": "1.49.1",
     "@types/node": "22.10.3",
+    "@types/picomatch": "^3.0.1",
     "cy-spok": "1.6.2",
     "cypress": "13.17.0",
     "cypress-map": "1.43.0",
