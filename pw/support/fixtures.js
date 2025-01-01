@@ -1,6 +1,6 @@
 const { test: base, mergeTests } = require('@playwright/test')
 const { test: baseFixtures } = require('./fixtures/base-fixtures')
-const { test: networkFixtures } = require('./fixtures/network-fixtures')
+const { test: networkFixtures } = require('./fixtures/network-fixture')
 const { test: apiE2EFixtures } = require('./fixtures/api-request-fixture')
 
 // add new fixtures here

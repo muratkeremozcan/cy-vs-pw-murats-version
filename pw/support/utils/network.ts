@@ -1,6 +1,8 @@
 // support/utils/network.ts
-import type { Page, Request, Response, Route } from '@playwright/test'
+import type {Page, Request, Response, Route} from '@playwright/test'
 import picomatch from 'picomatch'
+
+export type InterceptNetworkCall = ReturnType<typeof interceptNetworkCall>
 
 type FulfillResponse = {
   status?: number
@@ -66,8 +68,17 @@ async function fulfillNetworkCall(
   const routePattern = url?.startsWith('**') ? url : `**${url || '*'}`
   const preparedResponse = prepareResponse(fulfillResponse)
 
+  // Create a promise that will resolve with the request data
+  let resolveRequest: (request: Request) => void
+  const requestPromise = new Promise<Request>(resolve => {
+    resolveRequest = resolve
+  })
+
   await page.route(routePattern, async (route, request) => {
     if (matchesRequest(request, method, url)) {
+      // Capture the request before handling it
+      resolveRequest(request)
+
       if (handler) {
         await handler(route, request)
       } else if (preparedResponse) {
@@ -78,12 +89,21 @@ async function fulfillNetworkCall(
     }
   })
 
+  // Wait for the request to be captured
+  const request = await requestPromise
+  let requestJson = null
+  try {
+    requestJson = await request.postDataJSON()
+  } catch {
+    // Request has no post data or is not JSON
+  }
+
   return {
-    request: null,
+    request,
     response: null,
     data: fulfillResponse?.body ?? null,
     status: fulfillResponse?.status ?? 200,
-    requestJson: null,
+    requestJson,
   }
 }
 
@@ -92,7 +112,7 @@ async function observeNetworkCall(
   method?: string,
   url?: string,
 ): Promise<NetworkCallResult> {
-  const request = await page.waitForRequest((req) =>
+  const request = await page.waitForRequest(req =>
     matchesRequest(req, method, url),
   )
 
@@ -130,32 +150,9 @@ async function observeNetworkCall(
 function createUrlMatcher(pattern?: string): (url: string) => boolean {
   if (!pattern) return () => true
 
-  // Split pattern into path and query if it contains a question mark
-  const [pathPattern, queryPattern] = pattern.split('?')
-
-  // Convert URL pattern to glob pattern if needed
-  const globPattern = pathPattern?.startsWith('**')
-    ? pathPattern
-    : `**${pathPattern}`
+  const globPattern = pattern.startsWith('**') ? pattern : `**${pattern}`
   const isMatch = picomatch(globPattern)
-
-  return (url: string) => {
-    // Split URL into path and query
-    const [urlPath, urlQuery] = url.split('?')
-
-    // Check if path matches
-    const pathMatches = isMatch(urlPath as string)
-
-    // If there's no query pattern, just check the path
-    if (!queryPattern) return pathMatches
-
-    // If there's a query pattern but no query in URL, no match
-    if (!urlQuery) return false
-
-    // For query parameters, just check if it starts with the pattern
-    // This allows matching '/movies?' to match '/movies?name=something'
-    return pathMatches && urlQuery.startsWith(queryPattern)
-  }
+  return (url: string) => isMatch(url)
 }
 
 function matchesRequest(
@@ -178,7 +175,7 @@ function prepareResponse(
 ): PreparedResponse | undefined {
   if (!fulfillResponse) return undefined
 
-  const { status = 200, headers = {}, body } = fulfillResponse
+  const {status = 200, headers = {}, body} = fulfillResponse
   const contentType = headers['Content-Type'] || 'application/json'
 
   return {
