@@ -35,6 +35,7 @@
     "cypress-map": "1.43.0",
     "cypress-real-events": "1.13.0",
     "is-ci": "^4.0.0",
+    "picomatch": "^4.0.2",
     "prettier": "3.4.2",
     "sinon": "^19.0.2"
   }
