@@ -1,5 +1,7 @@
 const { test: base } = require('@playwright/test')
-const { apiRequest: apiRequestFunction } = require('./plain-functions')
+const {
+  apiRequest: apiRequestFunction,
+} = require('../fixture-helpers/plain-functions')
 
 const test = base.extend({
   apiRequest: async ({ request }, use) => {
