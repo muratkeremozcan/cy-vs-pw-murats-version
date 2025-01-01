@@ -1,5 +1,4 @@
-// support/utils/network.ts
-import type {Page, Request, Response, Route} from '@playwright/test'
+import type { Page, Request, Response, Route } from '@playwright/test'
 import picomatch from 'picomatch'
 
 export type InterceptNetworkCall = ReturnType<typeof interceptNetworkCall>
@@ -70,7 +69,7 @@ async function fulfillNetworkCall(
 
   // Create a promise that will resolve with the request data
   let resolveRequest: (request: Request) => void
-  const requestPromise = new Promise<Request>(resolve => {
+  const requestPromise = new Promise<Request>((resolve) => {
     resolveRequest = resolve
   })
 
@@ -112,7 +111,7 @@ async function observeNetworkCall(
   method?: string,
   url?: string,
 ): Promise<NetworkCallResult> {
-  const request = await page.waitForRequest(req =>
+  const request = await page.waitForRequest((req) =>
     matchesRequest(req, method, url),
   )
 
@@ -147,21 +146,38 @@ async function observeNetworkCall(
   }
 }
 
-function createUrlMatcher(pattern?: string): (url: string) => boolean {
+/** Creates a URL matcher function based on the provided glob pattern.
+ *
+ * @param {string} [pattern] - Glob pattern to match URLs against.
+ * @returns {(url: string) => boolean} - A function that takes a URL and returns whether it matches the pattern.
+ */
+function createUrlMatcher(pattern?: string) {
   if (!pattern) return () => true
 
   const globPattern = pattern.startsWith('**') ? pattern : `**${pattern}`
   const isMatch = picomatch(globPattern)
-  return (url: string) => isMatch(url)
+
+  return isMatch
 }
 
+/**
+ * Determines whether a network request matches the specified method and URL pattern.
+ *
+ * @param {Request} request - The network request to evaluate.
+ * @param {string} [method] - HTTP method to match.
+ * @param {string} [urlPattern] - URL pattern to match.
+ * @returns {boolean} - `true` if the request matches both the method and URL pattern; otherwise, `false`.
+ */
 function matchesRequest(
   request: Request,
   method?: string,
   urlPattern?: string,
 ): boolean {
   const matchesMethod = !method || request.method() === method
-  const matchesUrl = createUrlMatcher(urlPattern)(request.url())
+
+  const matcher = createUrlMatcher(urlPattern) // Step 1: Create the matcher function
+  const matchesUrl = matcher(request.url()) // Step 2: Use the matcher with the URL
+
   return matchesMethod && matchesUrl
 }
 
@@ -175,7 +191,7 @@ function prepareResponse(
 ): PreparedResponse | undefined {
   if (!fulfillResponse) return undefined
 
-  const {status = 200, headers = {}, body} = fulfillResponse
+  const { status = 200, headers = {}, body } = fulfillResponse
   const contentType = headers['Content-Type'] || 'application/json'
 
   return {
