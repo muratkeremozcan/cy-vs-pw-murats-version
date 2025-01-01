@@ -1,6 +1,8 @@
 // @ts-check
 const { test: base } = require('@playwright/test')
-const { resetAndVisit: resetAndVisitFunction } = require('./plain-functions')
+const {
+  resetAndVisit: resetAndVisitFunction,
+} = require('../ui-helpers/reset-and-visit')
 const {
   spyOn: spyOnFunction,
   stubMethod: stubMethodFunction,

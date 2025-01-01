@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const items = require('../fixtures/three.json')
-const { resetAndVisit } = require('./support/helpers/plain-functions')
+const { resetAndVisit } = require('./support/ui-helpers/reset-and-visit')
 
 /**
  * Composes asynchronous functions, passing the same 'page' argument to each function in sequence.
