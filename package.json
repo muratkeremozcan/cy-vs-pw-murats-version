@@ -17,7 +17,8 @@
     "pw:open-debug": "PWDEBUG=1 npx playwright test --ui",
     "pw:run": "npx playwright test",
     "pw:run-trace": "npx playwright test --trace on && npx playwright show-report",
-    "pw:open-trace": "npx playwright show-trace"
+    "pw:open-trace": "npx playwright show-trace",
+    "pw:clear": "rm -rf test-results playwright-report playwright/.cache"
   },
   "keywords": [],
   "license": "MIT",
