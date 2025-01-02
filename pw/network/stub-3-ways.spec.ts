@@ -1,7 +1,4 @@
-// @ts-check
-/// <reference types="cypress" />
-
-const { test, expect } = require('@playwright/test')
+import { test, expect } from '../support/fixtures'
 
 test.describe('App', () => {
   test('stubs the load data network call three different ways', async ({

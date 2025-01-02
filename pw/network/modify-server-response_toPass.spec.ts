@@ -1,7 +1,4 @@
-// @ts-check
-
-const { test, expect } = require('@playwright/test')
-const { interceptNetworkCall } = require('../support/utils/network')
+import { test, expect } from '../support/fixtures'
 
 test.describe('App', () => {
   test('inserts the first todo', async ({ page }) => {
@@ -29,6 +26,7 @@ test.describe('App', () => {
     // has the title text
     // and has the class "todo"
     // and does not have class "completed"
+
     await expect(async () => {
       const n = await todos.count()
       expect(n).toBeGreaterThan(0)

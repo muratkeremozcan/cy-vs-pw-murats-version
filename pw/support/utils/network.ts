@@ -23,7 +23,7 @@ export type InterceptOptions = {
   handler?: (route: Route, request: Request) => Promise<void> | void
 }
 
-type NetworkCallResult = {
+export type NetworkCallResult = {
   request: Request | null
   response: Response | null
   data: unknown

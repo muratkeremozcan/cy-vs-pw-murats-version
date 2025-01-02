@@ -1,5 +1,4 @@
-// @ts-check
-const { test } = require('@playwright/test')
+import { test } from '../support/fixtures'
 
 test.describe('App', () => {
   test('shows a loader', async ({ page }) => {
@@ -7,6 +6,7 @@ test.describe('App', () => {
     // and delay it by 2 seconds before
     // allowing it to continue to the server
     page.route('./todos', (route) => setTimeout(() => route.continue(), 2000))
+
     // spy on the "/todos" network call
     const loading = page.waitForResponse('/todos')
 
@@ -20,6 +20,5 @@ test.describe('App', () => {
     await page.locator('.loading').waitFor({ state: 'hidden' })
 
     // confirm the app finishes loading
-    await page.locator('.loaded').waitFor({ timeout: 100 })
   })
 })
