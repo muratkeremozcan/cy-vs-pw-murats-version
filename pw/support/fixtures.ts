@@ -4,10 +4,6 @@ import { test as resetAndVisit } from './fixtures/reset-and-visit'
 import { test as apiRequestFixture } from './fixtures/api-request-fixture'
 import { test as networkFixture } from './fixtures/network-fixture'
 
-// add new fixtures here
-// const { test: authTest } = require('./auth-fixtures');
-// const { test: apiTest } = require('./api-fixtures');
-
 // Merge the fixtures
 const test = mergeTests(
   resetAndVisit,

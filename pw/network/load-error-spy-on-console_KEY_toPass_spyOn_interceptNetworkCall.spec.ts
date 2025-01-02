@@ -1,7 +1,4 @@
-// @ts-check
-
-const { test, expect } = require('../support/fixtures')
-const { interceptNetworkCall } = require('../support/utils/network')
+import { test, expect } from '../support/fixtures'
 
 test.describe('App', () => {
   test('logs a server error', async ({ page }) => {
@@ -20,7 +17,7 @@ test.describe('App', () => {
     // set up an array to collect all text the app
     // prints using "console.error()" method
     // https://playwright.dev/docs/api/class-consolemessage
-    const errorMessages = []
+    const errorMessages: string[] = []
     page.on('console', (msg) => {
       if (msg.type() === 'error') {
         errorMessages.push(msg.text())
@@ -36,20 +33,18 @@ test.describe('App', () => {
     // to find the message "server error"
     // that the application should print when it receives
     // an error response from the backend
-    await expect(() =>
-      expect(errorMessages, 'error message').toContain('server error'),
-    ).toPass()
+    await expect(() => expect(errorMessages).toContain('server error')).toPass()
   })
 
   test('network console-spy helpers version - logs a server error', async ({
     page,
     spyOn,
+    interceptNetworkCall,
   }) => {
     // Stub the "GET /todos" route and return an object with status code 500
     const load = interceptNetworkCall({
       method: 'GET',
       url: '/todos',
-      page,
       fulfillResponse: {
         status: 500,
         body: 'server error',
@@ -70,11 +65,9 @@ test.describe('App', () => {
     // to find the message "server error"
     // that the application should print when it receives
     // an error response from the backend
+    // with spyOn utility, errorMessages comes in as an array of arrays, we need to flatten it
     await expect(() =>
-      expect(
-        errorMessages.map((args) => args.join(' ')),
-        'error message',
-      ).toContain('server error'),
+      expect(errorMessages.flat()).toContain('server error'),
     ).toPass()
   })
 })
