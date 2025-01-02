@@ -55,8 +55,8 @@ test.describe('App', () => {
     // wait for the POST call to happen
     // get the send data and the response data
     // and confirm they are the same
-    const { data, requestJson } = await post
-    expect(requestJson).toEqual(data)
+    const { responseJson, requestJson } = await post
+    expect(requestJson).toEqual(responseJson)
 
     const id = (requestJson as TodoPostRequest).id
     await apiRequest({

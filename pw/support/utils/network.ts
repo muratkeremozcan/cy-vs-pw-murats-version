@@ -26,7 +26,7 @@ export type InterceptOptions = {
 export type NetworkCallResult = {
   request: Request | null
   response: Response | null
-  data: unknown
+  responseJson: unknown
   status: number
   requestJson: unknown
 }
@@ -100,7 +100,7 @@ async function fulfillNetworkCall(
   return {
     request,
     response: null,
-    data: fulfillResponse?.body ?? null,
+    responseJson: fulfillResponse?.body ?? null,
     status: fulfillResponse?.status ?? 200,
     requestJson,
   }
@@ -140,7 +140,7 @@ async function observeNetworkCall(
   return {
     request,
     response,
-    data,
+    responseJson: data,
     status: response.status(),
     requestJson,
   }
