@@ -90,8 +90,8 @@ test.describe('App', () => {
     // log the id the app received
     console.log(`new item id ${id}`)
 
-    const { data } = await post
-    expect(data).toEqual({
+    const { responseJson } = await post
+    expect(responseJson).toEqual({
       title: 'Code',
       completed: false,
       id,

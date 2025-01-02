@@ -5,7 +5,7 @@ export type Todo = {
 }
 
 export type TodoPostResponse = {
-  data: Todo
+  responseJson: Todo
 }
 
 export type TodoPostRequest = Todo & { id: string }

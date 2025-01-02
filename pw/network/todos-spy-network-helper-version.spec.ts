@@ -18,7 +18,7 @@ test.describe('network GET spy - network helpers version', () => {
   }) => {
     // confirm the network call has happened and get the response as json
     // confirm the page shows the same number of todo items as sent by the server
-    const { data: todos } = await load
+    const { responseJson: todos } = await load
 
     await expect(page.locator('.todo-list li')).toHaveCount(
       (todos as Todo[]).length,

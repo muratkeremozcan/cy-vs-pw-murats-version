@@ -57,7 +57,7 @@ test.describe('App', () => {
     // get the request id sent by the application
     // from the network call "post-todo", confirm it is a string
     const {
-      data: { id: id1 },
+      responseJson: { id: id1 },
     } = (await postTodo1) as TodoPostResponse
     expect(id1).toEqual(expect.any(String))
 
@@ -72,7 +72,7 @@ test.describe('App', () => {
     // get the request id from the second todo sent by the application
     // confirm it is a string and it is different from the first request
     const {
-      data: { id: id2 },
+      responseJson: { id: id2 },
     } = (await postTodo2) as TodoPostResponse
     expect(id2).not.toEqual(id1)
   })
