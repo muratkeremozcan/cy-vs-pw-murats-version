@@ -3,3 +3,7 @@ export type Todo = {
   completed: boolean
   id: string
 }
+
+export type TodoPostResponse = {
+  data: Todo
+}

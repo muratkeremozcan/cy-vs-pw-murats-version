@@ -1,6 +1,6 @@
 // @ts-check
 
-const { test, expect } = require('../support/fixtures')
+import { test, expect } from '../support/fixtures'
 const items = require('../../fixtures/three.json')
 
 test.describe('App', () => {
