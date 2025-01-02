@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import type {Page} from '@playwright/test'
+import type { Page } from '@playwright/test'
 
 /**
  * Sets up a spy on a specified method within the page context.
@@ -69,7 +69,7 @@ export async function spyOn(
         ;(window as any)[exposedFunctionName](...args)
       }
     },
-    {objectName, method, exposedFunctionName},
+    { objectName, method, exposedFunctionName },
   )
 
   return messages

@@ -1,7 +1,7 @@
 // @ts-check
 const { test, expect } = require('@playwright/test')
 const items = require('../fixtures/three.json')
-const { tap, map, path, pipe, invoker } = require('ramda')
+const { map, path, pipe, invoker } = require('ramda')
 
 test.describe('App', () => {
   let todos
@@ -20,7 +20,6 @@ test.describe('App', () => {
       const titles = await todos.allTextContents()
       const matches = titles.map((s) => s.match(/\$(?<price>\d+)/))
       const strings = matches.map((m) => m?.groups?.price)
-      // @ts-ignore
       const prices = strings.map(parseFloat)
       const sorted = structuredClone(prices).sort() // doesn't mutate the original prices
       console.log(sorted)
@@ -34,6 +33,7 @@ test.describe('App', () => {
       const titles = await todos.allInnerTexts()
       const prices = pipe(
         map(invoker(1, 'match')(/\$(\d+(\.\d+)?)/)),
+        // @ts-expect-error okay
         map(path([1])),
         map(parseFloat),
       )(titles)

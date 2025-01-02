@@ -1,34 +1,18 @@
-// @ts-check
-const { test: base } = require('@playwright/test')
+import { test as base } from '@playwright/test'
 const {
   resetAndVisit: resetAndVisitFunction,
 } = require('../ui-helpers/reset-and-visit')
-const {
-  spyOn: spyOnFunction,
-  stubMethod: stubMethodFunction,
-} = require('../utils/spy-stub-helper')
 
 // Extend the base test with our custom fixture
 const test = base.extend({
   // Define the resetAndVisit fixture
   resetAndVisit: async ({ page, request }, use) => {
     // Define the function without needing to pass page and request
-    const resetAndVisit = (data) =>
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const resetAndVisit = (data: any) =>
       resetAndVisitFunction({ page, request, data })
     // Make the function available in the test
     await use(resetAndVisit)
-  },
-
-  spyOn: async ({ page }, use) => {
-    const spyOn = (objectName, method) =>
-      spyOnFunction(page, objectName, method)
-    await use(spyOn)
-  },
-
-  stubMethod: async ({ page }, use) => {
-    const stubMethod = (objectName, method, implementation) =>
-      stubMethodFunction(page, objectName, method, implementation)
-    await use(stubMethod)
   },
 })
 
