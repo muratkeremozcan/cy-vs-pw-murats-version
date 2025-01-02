@@ -1,5 +1,5 @@
-import {test as base} from '@playwright/test'
-import {apiRequest as apiRequestOriginal} from '../fixture-helpers/plain-functions'
+import { test as base } from '@playwright/test'
+import { apiRequest as apiRequestOriginal } from '../fixture-helpers/plain-functions'
 
 export type ApiRequestParams = {
   method: 'POST' | 'GET' | 'PUT' | 'DELETE'
@@ -25,7 +25,7 @@ type ApiRequestMethods = {
 }
 
 export const test = base.extend<ApiRequestMethods>({
-  apiRequest: async ({request}, use) => {
+  apiRequest: async ({ request }, use) => {
     const apiRequestFn: ApiRequestFn = async <T = unknown>({
       method,
       url,

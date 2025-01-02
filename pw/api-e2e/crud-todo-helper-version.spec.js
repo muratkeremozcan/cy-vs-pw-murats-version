@@ -73,7 +73,6 @@ test.describe('Todo API', () => {
     const { status: getDeletedTodoResStatus } = await apiRequest({
       method: 'GET',
       url: `/todos/${id}`,
-      failOnStatusCode: false,
     })
     expect(getDeletedTodoResStatus).toBe(404)
   })

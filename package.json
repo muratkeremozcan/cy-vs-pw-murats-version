@@ -7,6 +7,9 @@
   "scripts": {
     "start": "json-server --static . --watch data.json --middlewares ./node_modules/json-server-reset",
     "reset": "node reset-db.js",
+    "format": "prettier --ignore-path .gitignore --write \"**/*.+(js|json|css|md|mdx|html)\"",
+    "lint": "eslint . --cache-location node_modules/.cache/eslint --fix",
+    "typecheck": "tsc --noEmit",
     "cy:open": "cypress open --e2e --browser chrome",
     "cy:run": "cypress run --e2e --browser chrome",
     "cy:run-fast": "cypress run --e2e --browser chrome --config video=false screenshot=false",
@@ -39,6 +42,17 @@
     "is-ci": "^4.0.0",
     "picomatch": "^4.0.2",
     "prettier": "3.4.2",
-    "sinon": "^19.0.2"
+    "sinon": "^19.0.2",
+    "typescript": "^5.7.2",
+    "eslint": "8.57.1",
+    "eslint-config-prettier": "9.1.0",
+    "eslint-import-resolver-typescript": "3.7.0",
+    "eslint-plugin-cypress": "3.6.0",
+    "eslint-plugin-implicit-dependencies": "1.1.1",
+    "eslint-plugin-import": "2.31.0",
+    "eslint-plugin-no-only-tests": "3.3.0",
+    "eslint-plugin-prettier": "5.2.1",
+    "@typescript-eslint/eslint-plugin": "8.19.0",
+    "@typescript-eslint/parser": "8.19.0"
   }
 }

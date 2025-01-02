@@ -5,7 +5,7 @@ test.beforeEach(async ({ request, page }) => {
   // if the application throws an unhandled error  we want to fail the test.
   // In PW, we have to register the error callback before visiting the page
   page.on('pageerror', (exception) => {
-    throw new Error('App threw an error')
+    throw new Error(`App threw an error: ${exception}`)
   })
 
   await page.goto('/')

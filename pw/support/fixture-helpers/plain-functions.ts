@@ -1,4 +1,4 @@
-import type {APIRequestContext, APIResponse} from '@playwright/test'
+import type { APIRequestContext, APIResponse } from '@playwright/test'
 
 /**
  * Simplified helper for making API requests and returning the status and JSON body.
@@ -29,7 +29,7 @@ export async function apiRequest({
   baseUrl?: string
   body?: Record<string, unknown> | null
   headers?: Record<string, string>
-}): Promise<{status: number; body: unknown}> {
+}): Promise<{ status: number; body: unknown }> {
   let response: APIResponse
 
   // Common request options
@@ -49,13 +49,13 @@ export async function apiRequest({
       response = await request.post(fullUrl, options)
       break
     case 'GET':
-      response = await request.get(fullUrl, {headers})
+      response = await request.get(fullUrl, { headers })
       break
     case 'PUT':
       response = await request.put(fullUrl, options)
       break
     case 'DELETE':
-      response = await request.delete(fullUrl, {headers})
+      response = await request.delete(fullUrl, { headers })
       break
     default:
       throw new Error(`Unsupported HTTP method: ${method}`)
@@ -64,5 +64,5 @@ export async function apiRequest({
   const bodyJson = await response.json()
   const status = response.status()
 
-  return {status, body: bodyJson}
+  return { status, body: bodyJson }
 }
