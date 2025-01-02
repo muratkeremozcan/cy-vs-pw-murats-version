@@ -65,7 +65,7 @@ test.describe('App', () => {
 
     // wait for the post call and get the todo item id
     const {
-      data: { id },
+      responseJson: { id },
     } = (await postTodo) as TodoPostResponse
 
     // spy on the "DELETE /todos/:id" network call
