@@ -7,3 +7,5 @@ export type Todo = {
 export type TodoPostResponse = {
   data: Todo
 }
+
+export type TodoPostRequest = Todo & { id: string }

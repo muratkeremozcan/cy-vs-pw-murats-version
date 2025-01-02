@@ -1,7 +1,11 @@
+import type { TodoPostRequest } from '../../@types/todo'
 import { test, expect } from '../support/fixtures'
 
 test.describe('App', () => {
-  test('responds with the same data on posting new item', async ({ page }) => {
+  test('responds with the same data on posting new item', async ({
+    page,
+    apiRequest,
+  }) => {
     await page.goto('/')
     await page.locator('.loaded').waitFor()
 
@@ -21,11 +25,19 @@ test.describe('App', () => {
     const requestJson = await request.postDataJSON()
     const responseJson = await response?.json()
     expect(requestJson).toEqual(responseJson)
+
+    // clean up
+    const id = requestJson.id
+    await apiRequest({
+      method: 'DELETE',
+      url: `/todos/${id}`,
+    })
   })
 
   test('network helpers version - responds with the same data on posting new item', async ({
     page,
     interceptNetworkCall,
+    apiRequest,
   }) => {
     await page.goto('/')
     await page.locator('.loaded').waitFor()
@@ -45,5 +57,11 @@ test.describe('App', () => {
     // and confirm they are the same
     const { data, requestJson } = await post
     expect(requestJson).toEqual(data)
+
+    const id = (requestJson as TodoPostRequest).id
+    await apiRequest({
+      method: 'DELETE',
+      url: `/todos/${id}`,
+    })
   })
 })

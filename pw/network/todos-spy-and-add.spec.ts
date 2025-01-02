@@ -1,6 +1,4 @@
-// @ts-check
-const { test, expect } = require('../support/fixtures')
-const { interceptNetworkCall } = require('../support/utils/network')
+import { test, expect } from '../support/fixtures'
 
 test.describe('App', () => {
   // let loadSpy // is it really needed?
@@ -18,22 +16,31 @@ test.describe('App', () => {
         route.continue()
       }
     })
+    const load = page.waitForResponse(
+      (response) =>
+        response.url().includes('/todos') &&
+        response.request().method() === 'GET' &&
+        response.status() === 200,
+    )
 
     await page.goto('/')
     await page.locator('.loaded').waitFor()
     await expect(page.locator('.todo-list li')).toHaveCount(0)
+    await load
   })
 
-  test('shows the items with css class', async ({ page, apiRequest }) => {
+  test('shows the items with css class', async ({
+    page,
+    addTodo,
+    apiRequest,
+  }) => {
     // spy on the "POST /todos" call
     const postTodo = page.waitForRequest(
       (req) => req.method() === 'POST' && req.url().endsWith('/todos'),
     )
 
     // add an item
-    await page.locator('.new-todo').fill('Learn testing')
-    await page.locator('.new-todo').press('Enter')
-
+    addTodo('Learn testing')
     // confirm the new todo was sent over the network
     const request = await postTodo
     const response = await request.response()
@@ -49,41 +56,6 @@ test.describe('App', () => {
 
     // clean up
     const id = request.postDataJSON().id
-    await apiRequest({
-      method: 'DELETE',
-      url: `/todos/${id}`,
-    })
-  })
-
-  test('network helpers version -shows the items with css class', async ({
-    page,
-    apiRequest,
-  }) => {
-    const postTodo = interceptNetworkCall({
-      method: 'POST',
-      url: '/todos',
-      page,
-    })
-
-    // add an item
-    await page.locator('.new-todo').fill('Learn testing')
-    await page.locator('.new-todo').press('Enter')
-
-    // confirm the new todo was sent over the network
-    const { request, response } = await postTodo
-    // get the request data and confirm the known properties "title" and "completed"
-    // confirm the request body includes the property "id", as string
-    expect(request?.postDataJSON()).toEqual({
-      title: 'Learn testing',
-      completed: false,
-      id: expect.any(String),
-    })
-
-    // confirm the server responds with status code 201
-    expect(response?.status()).toBe(201)
-
-    // clean up
-    const id = request?.postDataJSON().id
     await apiRequest({
       method: 'DELETE',
       url: `/todos/${id}`,

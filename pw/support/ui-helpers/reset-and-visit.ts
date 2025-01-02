@@ -1,9 +1,10 @@
 import type { Page, APIRequestContext } from '@playwright/test'
+import type { Todo } from '../../../@types/todo'
 
 type ResetAndVisitParams = {
   page: Page
   request: APIRequestContext
-  data: Record<string, unknown>
+  data: Todo[]
 }
 
 /**

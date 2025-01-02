@@ -1,4 +1,3 @@
-// @ts-check
 import type { Page } from '@playwright/test'
 import { test, expect } from '../support/fixtures'
 import type { TodoPostResponse } from '../../@types/todo'

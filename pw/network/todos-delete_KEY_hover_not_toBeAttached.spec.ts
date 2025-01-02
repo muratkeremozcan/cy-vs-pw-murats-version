@@ -1,17 +1,15 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
-const { interceptNetworkCall } = require('../support/utils/network')
+import type { TodoPostResponse } from '../../@types/todo'
+import { test, expect } from '../support/fixtures'
 
 test.describe('App', () => {
   test.beforeEach(async ({ page }) => {
     await page.goto('/')
-    // wait for the page to load the todos
     await page.locator('.loaded').waitFor()
     // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
     await new Promise((resolve) => setTimeout(resolve, 2000))
   })
 
-  test('deletes a todo', async ({ page }) => {
+  test('deletes a todo', async ({ page, addTodo }) => {
     const title = 'Advance ' + Math.round(Math.random() * 1e6)
 
     // spy on the "POST /todos" network call
@@ -20,8 +18,7 @@ test.describe('App', () => {
     )
 
     // enter the new todo with a random title
-    await page.locator('input.new-todo').fill(title)
-    await page.locator('input.new-todo').press('Enter')
+    addTodo(title)
 
     // wait for the post call and get the todo item id
     const postRequest = await postTodo
@@ -34,8 +31,7 @@ test.describe('App', () => {
       (req) => req.method() === 'DELETE' && req.url().endsWith(`/todos/${id}`),
     )
 
-    // find the newly entered todo item
-    // and click on the delete button
+    // find the newly entered todo item and click on the delete button
     const todoElement = await page.locator('li.todo', { hasText: title })
     await todoElement.hover()
     await todoElement.locator('.destroy').click()
@@ -51,34 +47,34 @@ test.describe('App', () => {
     await expect(todoElement).not.toBeAttached()
   })
 
-  test('network helpers version - deletes a todo', async ({ page }) => {
+  test('network helpers version - deletes a todo', async ({
+    page,
+    interceptNetworkCall,
+    addTodo,
+  }) => {
     const title = 'Advance ' + Math.round(Math.random() * 1e6)
 
     // spy on the "POST /todos" network call
     const postTodo = interceptNetworkCall({
       method: 'POST',
       url: '/todos',
-      page,
     })
 
     // enter the new todo with a random title
-    await page.locator('input.new-todo').fill(title)
-    await page.locator('input.new-todo').press('Enter')
+    addTodo(title)
 
     // wait for the post call and get the todo item id
     const {
       data: { id },
-    } = await postTodo
+    } = (await postTodo) as TodoPostResponse
 
     // spy on the "DELETE /todos/:id" network call
     const deleteTodo = interceptNetworkCall({
       method: 'DELETE',
       url: `/todos/${id}`,
-      page,
     })
 
-    // find the newly entered todo item
-    // and click on the delete button
+    // find the newly entered todo item, and click on the delete button
     const todoElement = await page.locator('li.todo', { hasText: title })
     await todoElement.hover()
     await todoElement.locator('.destroy').click()

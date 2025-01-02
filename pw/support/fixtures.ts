@@ -1,6 +1,6 @@
 import { test as base, mergeTests } from '@playwright/test'
 import { test as baseFixtures } from './fixtures/base-fixtures'
-import { test as resetAndVisit } from './fixtures/reset-and-visit'
+import { test as resetAndVisit } from './fixtures/ui-fixtures'
 import { test as apiRequestFixture } from './fixtures/api-request-fixture'
 import { test as networkFixture } from './fixtures/network-fixture'
 
