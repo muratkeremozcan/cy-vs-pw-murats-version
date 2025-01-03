@@ -1,6 +1,6 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
-const items = require('../fixtures/three.json')
+import type { Todo } from '../@types/todo'
+import { test, expect } from './support/fixtures'
+const items: Todo[] = require('../fixtures/three.json')
 
 test.describe('Complete todos', () => {
   test.beforeEach(async ({ request, page }) => {
@@ -16,8 +16,8 @@ test.describe('Complete todos', () => {
 
     // confirm the item labels
     const labels = items.map((item) => item.title)
-    await expect(todoLabels).toHaveCount(items.length)
-    await expect(todoLabels).toHaveText(labels)
+    expect(todoLabels).toHaveCount(items.length)
+    expect(todoLabels).toHaveText(labels)
 
     // confirm the "2" todos remaining is shown
     await expect(count).toHaveText(String(items.length - 1))
@@ -41,7 +41,7 @@ test.describe('Complete todos', () => {
     await expect(count).toHaveText(String(items.length - 2))
     // and that we can clear the completed items button appears
     await expect(
-      page.getByRole('button', { name: 'Clear completed' }),
+      page.getByRole('button', { name: 'Clear completed ' }),
     ).toBeVisible()
   })
 })

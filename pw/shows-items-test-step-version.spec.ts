@@ -1,6 +1,6 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
-const items = require('../fixtures/three.json')
+import type { Todo } from '../@types/todo'
+import { test, expect } from './support/fixtures'
+const items: Todo[] = require('../fixtures/three.json')
 
 // this is pretty yucky...
 
@@ -9,14 +9,8 @@ test.describe('App', () => {
     // confirm there are several items
     // and some are completed and some are not
     expect(items.length, 'number of items').toBeGreaterThan(0)
-    expect(
-      items.some((item) => item.completed),
-      'has completed items',
-    ).toBeTruthy()
-    expect(
-      items.some((item) => !item.completed),
-      'has incomplete items',
-    ).toBeTruthy()
+    expect(items.some((item) => item.completed)).toBeTruthy()
+    expect(items.some((item) => !item.completed)).toBeTruthy()
     await request.post('/reset', { data: { todos: items } })
   })
 

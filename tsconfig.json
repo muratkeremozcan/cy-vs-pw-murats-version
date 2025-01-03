@@ -1,17 +1,7 @@
 {
-  "include": [
-    "src",
-    "jest.config.ts",
-    "jest.setup.ts",
-    "jest-pact.config.ts",
-    ".eslintrc.cjs",
-    "cypress",
-    "cypress.d.ts",
-    "pw",
-    "playwright.config.js",
-    "@types"
-  ],
+  "include": [".eslintrc.cjs", "pw", "playwright.config.js", "@types"],
   "exclude": [
+    "vendor",
     "node_modules",
     "coverage",
     "dist",

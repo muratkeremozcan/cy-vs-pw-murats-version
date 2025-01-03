@@ -1,14 +1,13 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
-const items = require('../fixtures/three.json')
+import type { Todo } from '../@types/todo'
+import type { Locator } from '@playwright/test'
+import { test, expect } from './support/fixtures'
+const items: Todo[] = require('../fixtures/three.json')
 const { map, path, pipe, invoker } = require('ramda')
 
 test.describe('App', () => {
-  let todos
-  test.beforeEach(async ({ request, page }) => {
-    await request.post('/reset', { data: { todos: items } })
-    await page.goto('/')
-    await page.locator('.loaded').waitFor()
+  let todos: Locator
+  test.beforeEach(async ({ page, resetAndVisit }) => {
+    await resetAndVisit(items)
     todos = page.locator('.todo-list li')
   })
 
@@ -17,23 +16,22 @@ test.describe('App', () => {
     // and parse each item's title to get the prices
     // and confirm they are sorted in the ascending order
     await expect(async () => {
-      const titles = await todos.allTextContents()
+      const titles = await todos.allTextContents() // or todos.allInnerTexts
       const matches = titles.map((s) => s.match(/\$(?<price>\d+)/))
       const strings = matches.map((m) => m?.groups?.price)
-      const prices = strings.map(parseFloat)
+      const prices = strings.map((s) => (s ? parseFloat(s) : 0))
       const sorted = structuredClone(prices).sort() // doesn't mutate the original prices
       console.log(sorted)
+
       expect(sorted, 'sorted from min to max').toEqual(prices)
     }).toPass()
   })
 
-  test('ramda version - shows items sorted by price', async ({ page }) => {
+  test('ramda version - shows items sorted by price', async () => {
     await expect(async () => {
-      const todos = page.locator('.todo-list li')
-      const titles = await todos.allInnerTexts()
+      const titles = await todos.allTextContents() // or todos.allInnerTexts
       const prices = pipe(
         map(invoker(1, 'match')(/\$(\d+(\.\d+)?)/)),
-        // @ts-expect-error okay
         map(path([1])),
         map(parseFloat),
       )(titles)
