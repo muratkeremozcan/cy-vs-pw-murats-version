@@ -1,17 +1,14 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
+import { test, expect } from './support/fixtures'
 
-test.beforeEach(async ({ request, page }) => {
+test.beforeEach(async ({ page }) => {
   // if the application throws an unhandled error  we want to fail the test.
   // In PW, we have to register the error callback before visiting the page
   page.on('pageerror', (exception) => {
-    throw new Error(`App threw an error: ${exception}`)
+    throw new Error(`App threw an error, ${exception}`)
   })
 
   await page.goto('/')
 
-  // https://playwright.dev/docs/locators
-  // https://playwright.dev/docs/api/class-locatorassertions
   await expect(page.locator('body')).toHaveClass('loaded')
   // same thing
   await page.locator('body.loaded').waitFor()

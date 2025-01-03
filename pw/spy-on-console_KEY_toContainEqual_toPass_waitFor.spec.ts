@@ -1,15 +1,33 @@
-// @ts-check
-const { test, expect } = require('./support/fixtures')
+import { test, expect } from './support/fixtures'
 
 test.describe('App', () => {
+  test('spyOn helper version - prints the load start message', async ({
+    page,
+    spyOn,
+  }) => {
+    // Initialize the console log spy
+    const log = await spyOn('console', 'log')
+
+    // Visit the application page
+    await page.goto('/')
+
+    // Wait for any asynchronous operations if necessary
+    await page.locator('.loaded').waitFor()
+
+    // Assert that the log array includes the expected arguments
+    await expect(() =>
+      expect(log).toContainEqual(['loadTodos start, delay is %d', 0]),
+    ).toPass()
+  })
+
   test('prints the load start message', async ({ page }) => {
-    const log = []
+    const log: string[] = []
     // create a function in the application's "window" object
     // called "logCall" which simply pushes its argument
     // into the "log" array
     // Read "Verifying API calls"
     // https://playwright.dev/docs/mock-browser-apis
-    await page.exposeFunction('logCall', (arg) => log.push(arg))
+    await page.exposeFunction('logCall', (arg: string) => log.push(arg))
 
     // inject the initial script into the application
     // that overwrites the "console.log" method
@@ -30,25 +48,6 @@ test.describe('App', () => {
 
     // confirm the "log" array includes the following arguments
     // ['loadTodos start, delay is %d', 0]
-    await expect(() =>
-      expect(log).toContainEqual(['loadTodos start, delay is %d', 0]),
-    ).toPass()
-  })
-
-  test('spyOn helper version - prints the load start message', async ({
-    page,
-    spyOn,
-  }) => {
-    // Initialize the console log spy
-    const log = await spyOn('console', 'log')
-
-    // Visit the application page
-    await page.goto('/')
-
-    // Wait for any asynchronous operations if necessary
-    await page.locator('.loaded').waitFor()
-
-    // Assert that the log array includes the expected arguments
     await expect(() =>
       expect(log).toContainEqual(['loadTodos start, delay is %d', 0]),
     ).toPass()

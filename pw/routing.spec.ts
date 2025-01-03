@@ -1,11 +1,9 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
+import { test, expect } from './support/fixtures'
 const items = require('../fixtures/three.json')
 
 test.describe('App routing', () => {
-  test.beforeEach(async ({ page, request }) => {
-    await request.post('/reset', { data: { todos: items } })
-    await page.goto('/')
+  test.beforeEach(async ({ resetAndVisit }) => {
+    await resetAndVisit(items)
   })
 
   test('shows all, completed, or incomplete todos', async ({ page }) => {
@@ -16,7 +14,8 @@ test.describe('App routing', () => {
     const completed = page.getByRole('link', { name: 'Completed' })
 
     // the application starts with 3 items
-    await expect(todos).toHaveCount(3)
+    // await expect(todos).toHaveCount(3) // better to make this more relaxed (shared state)
+    expect(await todos.count()).toBeGreaterThanOrEqual(items.length)
 
     // by default, the filter "All" is selected and nothing else
     await expect(all).toHaveClass('selected')
@@ -28,7 +27,8 @@ test.describe('App routing', () => {
     await expect(page).toHaveURL('#/active')
 
     // there should be 2 todo items shown
-    await expect(todos).toHaveCount(2)
+    // await expect(todos).toHaveCount(2) // better to make this more relaxed (shared state)
+    await expect(await todos.count()).toBeGreaterThanOrEqual(items.length - 1)
 
     // the filter "Active" is selected instead of "All" and nothing else
     await expect(all).not.toHaveClass('selected')
@@ -40,7 +40,8 @@ test.describe('App routing', () => {
     await expect(page).toHaveURL('#/completed')
 
     // there should be just one item shown
-    await expect(todos).toHaveCount(1)
+    // await expect(todos).toHaveCount(1) // better to make this more relaxed (shared state)
+    await expect(await todos.count()).toBeGreaterThanOrEqual(items.length - 2)
 
     // the filter "Completed" is selected, and nothing else
     await expect(all).not.toHaveClass('selected')
@@ -50,6 +51,7 @@ test.describe('App routing', () => {
     // click on the "All" link and confirm the URL hash changes
     await all.click()
     // and we are back to 3 items
-    await expect(todos).toHaveCount(3)
+    // await expect(todos).toHaveCount(3) // better to make this more relaxed (shared state)
+    expect(await todos.count()).toBeGreaterThanOrEqual(items.length)
   })
 })

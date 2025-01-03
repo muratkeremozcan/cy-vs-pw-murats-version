@@ -1,15 +1,12 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
-const todos = require('../fixtures/three.json')
-const { interceptNetworkCall } = require('./support/utils/network')
+import type { Todo } from '../@types/todo'
+import { test, expect } from './support/fixtures'
+const items: Todo[] = require('../fixtures/three.json')
 
 test.describe('App', () => {
-  test.beforeEach(async ({ page, request }) => {
-    await request.post('/reset', { data: { todos } })
-    await page.goto('/')
-    await expect(await page.locator('.todo').count()).toBe(3)
+  test.beforeEach(async ({ resetAndVisit }) => {
+    await resetAndVisit(items)
   })
-  test('uses ADD_TODO mutation', async ({ page }) => {
+  test('uses ADD_TODO mutation', async ({ page, interceptNetworkCall }) => {
     // the Vuex store used inside the application
     // calls a mutation to add new Todo to the store
     // ADD_TODO(state, todoObject) {
@@ -30,7 +27,7 @@ test.describe('App', () => {
       // @ts-ignore
       window.addTodoArgs = []
       const fn = ADD_TODO[0]
-      ADD_TODO[0] = (...args) => {
+      ADD_TODO[0] = (...args: any) => {
         // @ts-ignore
         window.addTodoArgs.push(args)
         return fn(...args)
@@ -40,7 +37,6 @@ test.describe('App', () => {
     const postTodo = interceptNetworkCall({
       method: 'POST',
       url: '/todos',
-      page,
     })
     // type the todo "a test" into the input element
     // confirm the "a test" todo appears on the page

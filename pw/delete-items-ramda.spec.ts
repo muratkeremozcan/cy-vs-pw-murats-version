@@ -1,7 +1,6 @@
-// @ts-check
-const { test, expect } = require('@playwright/test')
+import type { Page } from '@playwright/test'
+import { test, expect } from './support/fixtures'
 const items = require('../fixtures/three.json')
-const { resetAndVisit } = require('./support/ui-helpers/reset-and-visit')
 
 /**
  * Composes asynchronous functions, passing the same 'page' argument to each function in sequence.
@@ -10,33 +9,32 @@ const { resetAndVisit } = require('./support/ui-helpers/reset-and-visit')
  * @returns {Function} A function that takes 'page' and returns a Promise that resolves when all functions have completed.
  */
 const asyncPipe =
-  (...fns) =>
-  (page) =>
+  (...fns: any[]) =>
+  (page: Page) =>
     fns.reduce((promise, fn) => promise.then(() => fn(page)), Promise.resolve())
 
 // Helper functions accepting 'page' as an argument
-const deleteTodoAtIndex = (index) => async (page) => {
+const deleteTodoAtIndex = (index: number) => async (page: Page) => {
   const todos = page.locator('.todo-list li')
   await todos.nth(index).hover()
   await todos.nth(index).locator('.destroy').click()
 }
 
-const verifyTodosCount = (expectedCount) => async (page) => {
+const verifyTodosCount = (expectedCount: number) => async (page: Page) => {
   const todos = page.locator('.todo-list li')
   await expect(todos).toHaveCount(expectedCount)
 }
 
-const verifyTodosText = (expectedTexts) => async (page) => {
+const verifyTodosText = (expectedTexts: string[]) => async (page: Page) => {
   const todos = page.locator('.todo-list li')
   await expect(todos).toHaveText(expectedTexts)
 }
 
 test.describe('App', () => {
-  test.beforeEach(async ({ page, request }) => {
+  test.beforeEach(async ({ resetAndVisit }) => {
     // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
     await new Promise((resolve) => setTimeout(resolve, 3000))
-    // plain function version (not using fixture) needs to pass in page and request
-    await resetAndVisit({ page, request, data: items })
+    await resetAndVisit(items)
   })
 
   test('deletes items', async ({ page }) => {
