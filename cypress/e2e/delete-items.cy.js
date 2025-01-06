@@ -6,7 +6,7 @@ import items from '../../fixtures/three.json'
 describe('App', () => {
   beforeEach(() => {
     // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
-    cy.wait(2000)
+    // cy.wait(2000)
     cy.request('POST', '/reset', { todos: items })
   })
 

@@ -33,7 +33,7 @@ const verifyTodosText = (expectedTexts: string[]) => async (page: Page) => {
 test.describe('App', () => {
   test.beforeEach(async ({ resetAndVisit }) => {
     // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
-    await new Promise((resolve) => setTimeout(resolve, 3000))
+    // await new Promise((resolve) => setTimeout(resolve, 3000))
     await resetAndVisit(items)
   })
 

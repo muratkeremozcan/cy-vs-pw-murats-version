@@ -5,7 +5,7 @@ const items = require('../fixtures/three.json')
 test.describe('App', () => {
   test.beforeEach(async ({ resetAndVisit }) => {
     // do a hard wait (this is an anti pattern, but to run all examples together in parallel...)
-    await new Promise((resolve) => setTimeout(resolve, 2000))
+    // await new Promise((resolve) => setTimeout(resolve, 2000))
     await resetAndVisit(items)
   })
 
