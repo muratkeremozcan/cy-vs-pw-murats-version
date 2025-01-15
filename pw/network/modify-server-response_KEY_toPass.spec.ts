@@ -31,9 +31,9 @@ test.describe('App', () => {
       const n = await todos.count()
       expect(n).toBeGreaterThan(0)
       const first = await todos.first()
-      expect(first).toHaveText(title)
-      expect(first).toHaveClass(/todo/)
-      expect(first).not.toHaveClass(/completed/)
+      await expect(first).toHaveText(title)
+      await expect(first).toHaveClass(/todo/)
+      await expect(first).not.toHaveClass(/completed/)
     }).toPass()
 
     // clean up

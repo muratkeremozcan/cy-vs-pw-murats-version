@@ -31,7 +31,7 @@ test.describe('App', () => {
     })
 
     // add an item
-    addTodo('Learn testing')
+    await addTodo('Learn testing')
     // confirm the new todo was sent over the network
     const { requestJson, response } = await postTodo
 

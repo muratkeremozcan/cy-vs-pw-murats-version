@@ -6,14 +6,14 @@ test.describe('App', () => {
     // intercept the route "/todos"
     // - "GET /todos" respond with an empty list
     // - otherwise let the request continue
-    page.route('/todos', (route) => {
+    await page.route('/todos', async (route) => {
       if (route.request().method() === 'GET') {
         return route.fulfill({
           headers: { 'Content-Type': 'application/json' },
           body: JSON.stringify([]),
         })
       } else {
-        route.continue()
+        await route.continue()
       }
     })
     const load = page.waitForResponse(
@@ -40,7 +40,7 @@ test.describe('App', () => {
     )
 
     // add an item
-    addTodo('Learn testing')
+    await addTodo('Learn testing')
     // confirm the new todo was sent over the network
     const request = await postTodo
     const response = await request.response()

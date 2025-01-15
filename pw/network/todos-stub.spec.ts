@@ -5,12 +5,12 @@ test.describe(' - regular version', () => {
   test.beforeEach(async ({ page }) => {
     // set up a route handler for "/todos" endpoint
     // when the route matches, fulfill it using the loaded items array
-    page.route('/todos', (route) => {
+    await page.route('/todos', (route) =>
       route.fulfill({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(items),
-      })
-    })
+      }),
+    )
 
     await page.goto('/')
   })

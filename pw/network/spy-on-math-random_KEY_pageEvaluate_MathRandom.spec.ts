@@ -23,7 +23,7 @@ test.describe('App', () => {
     // - returns the created random float to the caller
     // Tip: to later be able to read the generated float
     // stores it as a property of the window object
-    page.evaluate(() => {
+    await page.evaluate(() => {
       const rand = Math.random
       Math.random = () => {
         // @ts-ignore
@@ -67,7 +67,7 @@ test.describe('App', () => {
       url: '/todos',
     })
 
-    page.evaluate(() => {
+    await page.evaluate(() => {
       const rand = Math.random
       Math.random = () => {
         // @ts-ignore
