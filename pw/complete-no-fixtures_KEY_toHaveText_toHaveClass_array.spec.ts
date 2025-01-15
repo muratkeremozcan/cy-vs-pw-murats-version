@@ -16,8 +16,8 @@ test.describe('Complete todos', () => {
 
     // confirm the item labels
     const labels = items.map((item) => item.title)
-    expect(todoLabels).toHaveCount(items.length)
-    expect(todoLabels).toHaveText(labels)
+    await expect(todoLabels).toHaveCount(items.length)
+    await expect(todoLabels).toHaveText(labels)
 
     // confirm the "2" todos remaining is shown
     await expect(count).toHaveText(String(items.length - 1))

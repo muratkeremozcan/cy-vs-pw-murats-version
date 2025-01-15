@@ -26,13 +26,13 @@ test.describe('App', () => {
     // go through the items and confirm each is rendered correctly
     // - label text
     // - completed or not
-    items.forEach((item, k) => {
-      expect(todos.nth(k).locator('label')).toHaveText(item.title)
+    items.forEach(async (item, k) => {
+      await expect(todos.nth(k).locator('label')).toHaveText(item.title)
 
       if (item.completed) {
-        expect(todos.nth(k)).toHaveClass(/completed/)
+        await expect(todos.nth(k)).toHaveClass(/completed/)
       } else {
-        expect(todos.nth(k)).not.toHaveClass(/completed/)
+        await expect(todos.nth(k)).not.toHaveClass(/completed/)
       }
     })
 

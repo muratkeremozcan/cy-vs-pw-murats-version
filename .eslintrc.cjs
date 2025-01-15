@@ -42,6 +42,7 @@ module.exports = {
   rules: {
     '@typescript-eslint/consistent-type-imports': 'error',
     '@typescript-eslint/consistent-type-exports': 'error',
+    '@typescript-eslint/no-floating-promises': 'error',
     '@typescript-eslint/no-explicit-any': 'off',
     '@typescript-eslint/ban-ts-comment': 'off',
     'no-only-tests/no-only-tests': 'error',

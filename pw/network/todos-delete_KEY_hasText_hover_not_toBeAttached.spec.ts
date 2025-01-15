@@ -18,7 +18,7 @@ test.describe('App', () => {
     )
 
     // enter the new todo with a random title
-    addTodo(title)
+    await addTodo(title)
 
     // wait for the post call and get the todo item id
     const postRequest = await postTodo
@@ -61,7 +61,7 @@ test.describe('App', () => {
     })
 
     // enter the new todo with a random title
-    addTodo(title)
+    await addTodo(title)
 
     // wait for the post call and get the todo item id
     const {
