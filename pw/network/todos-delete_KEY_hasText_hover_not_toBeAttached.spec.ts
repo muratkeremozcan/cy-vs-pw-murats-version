@@ -32,7 +32,7 @@ test.describe('App', () => {
     )
 
     // find the newly entered todo item and click on the delete button
-    const todoElement = await page.locator('li.todo', { hasText: title })
+    const todoElement = page.locator('li.todo', { hasText: title })
     await todoElement.hover()
     await todoElement.locator('.destroy').click()
 
@@ -40,7 +40,7 @@ test.describe('App', () => {
     // and the server responded with the status code 200
     const deleteRequest = await deleteTodo
     const deleteResponse = await deleteRequest.response()
-    const deleteResponseStatus = await deleteResponse?.status()
+    const deleteResponseStatus = deleteResponse?.status()
     expect(deleteResponseStatus).toBe(200)
 
     // confirm the new todo is no longer on the page
@@ -75,7 +75,7 @@ test.describe('App', () => {
     })
 
     // find the newly entered todo item, and click on the delete button
-    const todoElement = await page.locator('li.todo', { hasText: title })
+    const todoElement = page.locator('li.todo', { hasText: title })
     await todoElement.hover()
     await todoElement.locator('.destroy').click()
 

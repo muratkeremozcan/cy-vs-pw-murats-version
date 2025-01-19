@@ -42,7 +42,7 @@ test.describe('serial run', () => {
     // find the first todo and click on its ".toggle" button
     await page.locator('.todo .toggle').first().click()
     // the first todo should get the class "completed"
-    await expect(await page.locator('.todo').first()).toHaveClass(/completed/)
+    await expect(page.locator('.todo').first()).toHaveClass(/completed/)
   })
 
   test('clears completed todos', async () => {
