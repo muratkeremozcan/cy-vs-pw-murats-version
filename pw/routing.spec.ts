@@ -28,7 +28,7 @@ test.describe('App routing', () => {
 
     // there should be 2 todo items shown
     // await expect(todos).toHaveCount(2) // better to make this more relaxed (shared state)
-    await expect(await todos.count()).toBeGreaterThanOrEqual(items.length - 1)
+    expect(todos.count()).toBeGreaterThanOrEqual(items.length - 1)
 
     // the filter "Active" is selected instead of "All" and nothing else
     await expect(all).not.toHaveClass('selected')
@@ -41,7 +41,7 @@ test.describe('App routing', () => {
 
     // there should be just one item shown
     // await expect(todos).toHaveCount(1) // better to make this more relaxed (shared state)
-    await expect(await todos.count()).toBeGreaterThanOrEqual(items.length - 2)
+    expect(todos.count()).toBeGreaterThanOrEqual(items.length - 2)
 
     // the filter "Completed" is selected, and nothing else
     await expect(all).not.toHaveClass('selected')

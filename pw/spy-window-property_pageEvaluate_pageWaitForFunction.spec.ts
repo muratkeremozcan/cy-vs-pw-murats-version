@@ -43,7 +43,7 @@ test.describe('App', () => {
     await page.locator('.new-todo').fill('a test')
     await page.locator('.new-todo').press('Enter')
     await postTodo
-    await page.locator('li.todo', { hasText: 'a test' })
+    page.locator('li.todo', { hasText: 'a test' })
 
     // get the "addTodo" spy and confirm it was called
     // with expected argument object

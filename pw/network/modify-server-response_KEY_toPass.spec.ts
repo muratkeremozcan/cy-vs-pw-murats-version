@@ -30,7 +30,7 @@ test.describe('App', () => {
     await expect(async () => {
       const n = await todos.count()
       expect(n).toBeGreaterThan(0)
-      const first = await todos.first()
+      const first = todos.first()
       await expect(first).toHaveText(title)
       await expect(first).toHaveClass(/todo/)
       await expect(first).not.toHaveClass(/completed/)
