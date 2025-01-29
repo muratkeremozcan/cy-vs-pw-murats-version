@@ -36,7 +36,7 @@
     "@types/node": "22.12.0",
     "@types/picomatch": "^3.0.1",
     "cy-spok": "1.6.2",
-    "cypress": "14.0.0",
+    "cypress": "14.0.1",
     "cypress-map": "1.43.0",
     "cypress-real-events": "1.14.0",
     "is-ci": "^4.0.0",
