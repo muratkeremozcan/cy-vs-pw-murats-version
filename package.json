@@ -32,8 +32,8 @@
   },
   "devDependencies": {
     "@bahmutov/cy-api": "^2.2.6",
-    "@playwright/test": "1.50.0",
-    "@types/node": "22.12.0",
+    "@playwright/test": "1.50.1",
+    "@types/node": "22.13.0",
     "@types/picomatch": "^3.0.1",
     "cy-spok": "1.6.2",
     "cypress": "14.0.1",
