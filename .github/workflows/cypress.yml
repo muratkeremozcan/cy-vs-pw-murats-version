@@ -29,7 +29,7 @@ jobs:
           node-version: ${{ env.NODE_VERSION }}
 
       - name: Cypress e2e tests 🧪
-        uses: cypress-io/github-action@v6.7.10
+        uses: cypress-io/github-action@v6.7.11
         with:
           start: npm run start
           wait-on: 'http://localhost:3000'
