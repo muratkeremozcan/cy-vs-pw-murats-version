@@ -32,7 +32,7 @@
   },
   "devDependencies": {
     "@bahmutov/cy-api": "^2.2.6",
-    "@playwright/test": "1.51.0",
+    "@playwright/test": "1.51.1",
     "@types/node": "22.13.10",
     "@types/picomatch": "^3.0.1",
     "cy-spok": "1.6.2",
@@ -45,7 +45,7 @@
     "typescript": "^5.7.2",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.1",
-    "eslint-import-resolver-typescript": "4.0.0",
+    "eslint-import-resolver-typescript": "4.2.0",
     "eslint-plugin-cypress": "3.6.0",
     "eslint-plugin-implicit-dependencies": "1.1.1",
     "eslint-plugin-import": "2.31.0",
