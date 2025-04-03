@@ -34,7 +34,7 @@
     "@bahmutov/cy-api": "^2.2.6",
     "@playwright/test": "1.51.1",
     "@types/node": "22.13.14",
-    "@types/picomatch": "^3.0.1",
+    "@types/picomatch": "^4.0.0",
     "cy-spok": "1.6.2",
     "cypress": "14.2.1",
     "cypress-map": "1.46.0",
