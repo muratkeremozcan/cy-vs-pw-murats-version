@@ -45,13 +45,13 @@
     "typescript": "^5.7.2",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.1",
-    "eslint-import-resolver-typescript": "4.3.1",
+    "eslint-import-resolver-typescript": "4.3.2",
     "eslint-plugin-cypress": "3.6.0",
     "eslint-plugin-implicit-dependencies": "1.1.1",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-no-only-tests": "3.3.0",
     "eslint-plugin-prettier": "5.2.6",
-    "@typescript-eslint/eslint-plugin": "8.29.0",
-    "@typescript-eslint/parser": "8.29.0"
+    "@typescript-eslint/eslint-plugin": "8.29.1",
+    "@typescript-eslint/parser": "8.29.1"
   }
 }
