@@ -37,7 +37,7 @@
     "@types/picomatch": "^4.0.0",
     "cy-spok": "1.6.2",
     "cypress": "14.3.3",
-    "cypress-map": "1.48.0",
+    "cypress-map": "1.48.1",
     "cypress-real-events": "1.14.0",
     "is-ci": "^4.0.0",
     "picomatch": "^4.0.2",
