@@ -33,7 +33,7 @@
   "devDependencies": {
     "@bahmutov/cy-api": "^2.2.6",
     "@playwright/test": "1.52.0",
-    "@types/node": "22.15.21",
+    "@types/node": "22.15.29",
     "@types/picomatch": "^4.0.0",
     "cy-spok": "1.6.2",
     "cypress": "14.4.0",
@@ -45,13 +45,13 @@
     "typescript": "^5.7.2",
     "eslint": "8.57.1",
     "eslint-config-prettier": "10.1.5",
-    "eslint-import-resolver-typescript": "4.4.1",
+    "eslint-import-resolver-typescript": "4.4.2",
     "eslint-plugin-cypress": "3.6.0",
     "eslint-plugin-implicit-dependencies": "1.1.1",
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-no-only-tests": "3.3.0",
-    "eslint-plugin-prettier": "5.4.0",
-    "@typescript-eslint/eslint-plugin": "8.32.1",
-    "@typescript-eslint/parser": "8.32.1"
+    "eslint-plugin-prettier": "5.4.1",
+    "@typescript-eslint/eslint-plugin": "8.33.0",
+    "@typescript-eslint/parser": "8.33.0"
   }
 }
