@@ -32,12 +32,12 @@
   },
   "devDependencies": {
     "@bahmutov/cy-api": "^2.2.6",
-    "@playwright/test": "1.52.0",
-    "@types/node": "22.15.30",
+    "@playwright/test": "1.53.0",
+    "@types/node": "22.15.31",
     "@types/picomatch": "^4.0.0",
     "cy-spok": "1.6.2",
     "cypress": "14.4.1",
-    "cypress-map": "1.48.1",
+    "cypress-map": "1.49.0",
     "cypress-real-events": "1.14.0",
     "is-ci": "^4.0.0",
     "picomatch": "^4.0.2",
@@ -51,7 +51,7 @@
     "eslint-plugin-import": "2.31.0",
     "eslint-plugin-no-only-tests": "3.3.0",
     "eslint-plugin-prettier": "5.4.1",
-    "@typescript-eslint/eslint-plugin": "8.33.1",
-    "@typescript-eslint/parser": "8.33.1"
+    "@typescript-eslint/eslint-plugin": "8.34.0",
+    "@typescript-eslint/parser": "8.34.0"
   }
 }
