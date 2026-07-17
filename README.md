@@ -12,3 +12,5 @@ npm run pw:open
 npm run pw:run
 
 ```
+
+test ci speed
